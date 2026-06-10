@@ -1,0 +1,114 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Erreur de connexion");
+      } else {
+        window.posthog?.capture("login_completed");
+        router.push("/account");
+      }
+    } catch {
+      setError("Erreur réseau");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{ background: "#FDFAF5", fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+    >
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <Link href="/" className="inline-block text-2xl font-bold" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1B2A4A" }}>
+            ✈️ TravelGuide AI
+          </Link>
+        </div>
+
+        <div className="rounded-2xl p-8 shadow-lg" style={{ background: "#fff", border: "1px solid #E8E0D0" }}>
+          <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1B2A4A" }}>
+            Connexion
+          </h1>
+          <p className="text-sm mb-6" style={{ color: "#7a7060" }}>
+            Accédez à votre espace client et suivez vos commandes.
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: "#1B2A4A" }}>Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="vous@exemple.com"
+                className="w-full rounded-xl px-4 py-3 text-sm outline-none transition-all"
+                style={{ background: "#F8F5EF", border: "1.5px solid #E8E0D0", color: "#1B2A4A" }}
+                onFocus={(e) => (e.target.style.borderColor = "#C9A84C")}
+                onBlur={(e) => (e.target.style.borderColor = "#E8E0D0")}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1" style={{ color: "#1B2A4A" }}>Mot de passe</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+                className="w-full rounded-xl px-4 py-3 text-sm outline-none transition-all"
+                style={{ background: "#F8F5EF", border: "1.5px solid #E8E0D0", color: "#1B2A4A" }}
+                onFocus={(e) => (e.target.style.borderColor = "#C9A84C")}
+                onBlur={(e) => (e.target.style.borderColor = "#E8E0D0")}
+              />
+            </div>
+
+            {error && (
+              <div className="rounded-lg px-4 py-3 text-sm" style={{ background: "#fef2f2", color: "#dc2626", border: "1px solid #fecaca" }}>
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-xl py-3 font-semibold text-sm transition-all"
+              style={{ background: loading ? "#8899bb" : "#1B2A4A", color: "#fff" }}
+            >
+              {loading ? "Connexion…" : "Se connecter"}
+            </button>
+          </form>
+
+          <div className="mt-6 pt-6 text-center text-sm" style={{ borderTop: "1px solid #E8E0D0", color: "#7a7060" }}>
+            Pas encore de compte ?{" "}
+            <Link href="/signup" className="font-semibold" style={{ color: "#C9A84C" }}>
+              Créer un compte
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
