@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import LangToggle from "@/components/LangToggle";
 import { addCartItem, CART_PLANS, getCartItem, updateCartItem, type CartItemInput } from "@/lib/cart";
 
 /* ──────────────────────────────────────────────────────────
@@ -977,6 +978,7 @@ function QuestionnaireContent() {
             >
               TravelGuide AI
             </Link>
+            <LangToggle />
             <div className="flex items-center gap-2 bg-[#425B48]/8 border border-[#425B48]/15 rounded-full px-3 py-1.5 text-xs font-semibold text-[#425B48]">
               <span>✈️</span>
               {plan ? (

@@ -50,7 +50,7 @@ const translations = {
     pricing_title: "Choisissez votre aventure",
     pricing_sub:
       "Chaque plan inclut tout ce que comprend le plan précédent, plus des fonctionnalités supplémentaires.",
-    gift_tooltip: "-40% avec le code WELCOME (1 fois, tél. vérifié)",
+    gift_tooltip: "🏷️ -40% avec le code WELCOME",
     gift_unlocked_tooltip: "✅ Code WELCOME disponible !",
     plans: [
       {
@@ -134,10 +134,8 @@ const translations = {
       { number: "12 000+", label: "clients satisfaits" },
       { number: "4.9★", label: "note moyenne" },
       { number: "98%", label: "de satisfaction" },
-      { number: "500+", label: "destinations" },
+      { number: "+1000", label: "destinations" },
     ],
-    social_quote: "\"Pour 3€, j'ai économisé des heures de recherche. Le guide a tout anticipé.\"",
-    social_quote_author: "— Thomas L., Lyon → New York",
     bottom_title: "Prêt pour votre prochain voyage ?",
     bottom_sub: "Rejoignez des centaines de voyageurs qui ont optimisé leur aventure avec TravelGuide AI.",
     footer_tagline: "L'intelligence artificielle au service de vos aventures.",
@@ -214,7 +212,7 @@ const translations = {
     ],
     pricing_title: "Choose your adventure",
     pricing_sub: "Each plan includes everything from the previous plan, plus additional features.",
-    gift_tooltip: "-40% with code WELCOME (once, verified phone)",
+    gift_tooltip: "🏷️ -40% with code WELCOME",
     gift_unlocked_tooltip: "✅ WELCOME code available!",
     plans: [
       {
@@ -298,10 +296,8 @@ const translations = {
       { number: "12,000+", label: "happy customers" },
       { number: "4.9★", label: "average rating" },
       { number: "98%", label: "satisfaction rate" },
-      { number: "500+", label: "destinations" },
+      { number: "+1000", label: "destinations" },
     ],
-    social_quote: "\"For €3, I saved hours of research. The guide anticipated everything I needed.\"",
-    social_quote_author: "— Thomas L., Lyon → New York",
     bottom_title: "Ready for your next journey?",
     bottom_sub: "Join hundreds of travelers who have optimized their adventure with TravelGuide AI.",
     footer_tagline: "Artificial intelligence at the service of your adventures.",
@@ -513,7 +509,10 @@ export default function Home() {
             <div className="animate-float relative">
               <div className="bg-white rounded-2xl shadow-2xl p-7 border border-[#425C47]/5 w-full max-w-sm">
                 <div className="bg-[#425C47] text-white rounded-xl p-5 mb-5">
-                  <div className="text-[10px] font-mono text-white/40 tracking-widest mb-2">TRAVELGUIDE AI</div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-[10px] font-mono text-white/40 tracking-widest">TRAVELGUIDE AI</div>
+                    <span className="text-[#C9A84C] font-black text-lg" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>7€</span>
+                  </div>
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <div className="text-2xl font-bold" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
@@ -804,48 +803,149 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Day itinerary */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_40px_rgba(0,0,0,0.08)] p-8 border border-gray-100">
-              <div className="border-b-2 border-[#C9A84C] pb-4 mb-6">
-                <div className="text-[10px] font-mono text-[#C9A84C] tracking-widest mb-1">{tx.example_day_mono}</div>
-                <h3 className="text-2xl font-bold" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
-                  Harajuku & Shibuya
+            {/* Jour 1 complet — scrollable */}
+            <div className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_40px_rgba(0,0,0,0.08)] border border-gray-100 flex flex-col">
+              {/* Header sticky */}
+              <div className="border-b-2 border-[#C9A84C] px-7 pt-7 pb-4 bg-white">
+                <div className="text-[10px] font-mono text-[#C9A84C] tracking-widest mb-1">
+                  {lang === "fr" ? "JOUR 1 — PROGRAMME COMPLET" : "DAY 1 — FULL SCHEDULE"}
+                </div>
+                <h3 className="text-xl font-bold text-[#425C47]" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
+                  {lang === "fr" ? "Arrivée à Tokyo · Shinjuku & Kabukicho" : "Arrival in Tokyo · Shinjuku & Kabukicho"}
                 </h3>
-                <p className="text-[#425C47]/45 text-sm mt-1">{tx.example_day_desc}</p>
+                <div className="flex gap-3 mt-2">
+                  <span className="text-[10px] bg-[#425C47]/8 text-[#425C47] px-2 py-0.5 rounded-full font-semibold">
+                    {lang === "fr" ? "🗓️ Budget estimé : ~¥8 500 (~55€)" : "🗓️ Est. budget: ~¥8,500 (~€55)"}
+                  </span>
+                  <span className="text-[10px] bg-[#C9A84C]/10 text-[#9a7629] px-2 py-0.5 rounded-full font-semibold">
+                    {lang === "fr" ? "🚇 IC Card recommandée" : "🚇 IC Card recommended"}
+                  </span>
+                </div>
               </div>
-              <div className="space-y-5">
-                {tx.example_day_items.map((item) => (
-                  <div key={item.time} className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 text-right">
-                      <div className="font-mono text-xs text-[#425C47]/35 mt-0.5">{item.time}</div>
+
+              {/* Timeline scrollable */}
+              <div className="overflow-y-auto max-h-[500px] px-7 py-5 space-y-0">
+                {[
+                  {
+                    time: lang === "fr" ? "9h00" : "9am",
+                    label: lang === "fr" ? "Matin" : "Morning",
+                    title: lang === "fr" ? "Arrivée & Petit-déjeuner" : "Arrival & Breakfast",
+                    desc: lang === "fr"
+                      ? "Déposez vos bagages à l'hôtel (check-in souvent possible dès 9h). Direction le konbini (7-Eleven) du coin pour un onigiri au saumon et un café chaud — expérience 100% japonaise."
+                      : "Drop luggage at hotel (early check-in often possible from 9am). Head to the nearest konbini (7-Eleven) for a salmon onigiri and hot coffee — a true Japanese experience.",
+                    tip: lang === "fr" ? "💡 Tip : prenez votre IC Card à la machine dès l'aéroport. ~¥500" : "💡 Tip: Get your IC Card at the airport machine. ~¥500",
+                    tag: lang === "fr" ? "Pratique" : "Practical",
+                    color: "#94a3b8",
+                  },
+                  {
+                    time: lang === "fr" ? "10h30" : "10:30am",
+                    label: lang === "fr" ? "Matin" : "Morning",
+                    title: lang === "fr" ? "Sanctuaire Meiji Jingu" : "Meiji Jingu Shrine",
+                    desc: lang === "fr"
+                      ? "Forêt de 70 000 arbres au cœur de Tokyo. Le calme absolu à 15 min du chaos de Shinjuku. Arrivez tôt pour éviter les groupes. La grande torii en bois de cyprès est saisissante. Entrée libre, comptez 1h."
+                      : "Forest of 70,000 trees in the heart of Tokyo. Absolute calm, 15min from Shinjuku chaos. Arrive early to avoid tour groups. The large cypress torii is breathtaking. Free entry, allow 1h.",
+                    tip: lang === "fr" ? "💡 Tip : tradition du vœu sur ema (tablette en bois) ~¥500. Ne pas photographier les mariages." : "💡 Tip: Write a wish on an ema wooden tablet ~¥500. Don't photograph weddings.",
+                    tag: lang === "fr" ? "Spirituel" : "Spiritual",
+                    color: "#425B48",
+                  },
+                  {
+                    time: lang === "fr" ? "12h00" : "12pm",
+                    label: lang === "fr" ? "Midi" : "Lunch",
+                    title: lang === "fr" ? "Déjeuner : Ramen Ichiran Shinjuku" : "Lunch: Ramen Ichiran Shinjuku",
+                    desc: lang === "fr"
+                      ? "Ramen en cabine individuelle — le concept unique d'Ichiran. Commandez via formulaire, choisissez l'intensité du bouillon, la dureté des nouilles. File d'attente ~20min mais ça vaut absolument chaque seconde. Bouillon de porc tonkotsu crémeux."
+                      : "Individual booth ramen — Ichiran's unique concept. Order via form, choose broth intensity and noodle firmness. Queue ~20min but absolutely worth every second. Creamy tonkotsu pork broth.",
+                    tip: lang === "fr" ? "💡 ~¥1 500/pers · Ajoutez un œuf et une portion supplémentaire de nouilles (+¥200)" : "💡 ~¥1,500/pp · Add an egg and extra noodle portion (+¥200)",
+                    tag: lang === "fr" ? "Gastronomie" : "Gastronomy",
+                    color: "#C9A84C",
+                  },
+                  {
+                    time: lang === "fr" ? "13h30" : "1:30pm",
+                    label: lang === "fr" ? "Après-midi" : "Afternoon",
+                    title: "Takeshita Street · Harajuku",
+                    desc: lang === "fr"
+                      ? "La rue la plus folle de Tokyo : fashion underground, crepes géantes, déco kawaii et cosplay. Ambiance unique au monde. Idéal pour observer la culture jeune japonaise. Évitez le week-end si vous n'aimez pas la foule."
+                      : "Tokyo's craziest street: underground fashion, giant crepes, kawaii decor and cosplay. A globally unique atmosphere. Great for observing Japanese youth culture. Avoid weekends if you dislike crowds.",
+                    tip: lang === "fr" ? "💡 Crepe chez Daisy's Crepe ~¥700 · La rue fait 350m, comptez 45min" : "💡 Crepe at Daisy's Crepe ~¥700 · The street is 350m, allow 45min",
+                    tag: lang === "fr" ? "Shopping" : "Shopping",
+                    color: "#C9A84C",
+                  },
+                  {
+                    time: lang === "fr" ? "15h00" : "3pm",
+                    label: lang === "fr" ? "Après-midi" : "Afternoon",
+                    title: lang === "fr" ? "Carrefour de Shibuya" : "Shibuya Crossing",
+                    desc: lang === "fr"
+                      ? "Le carrefour le plus photographié du monde — jusqu'à 2 500 personnes traversent simultanément. Vue plongeante depuis le café Starbucks Reserve Roastery (niveau 1, baie vitrée) ou gratuitement depuis la terrasse du Scramble Square (gratuit depuis la rue, payant depuis le toit)."
+                      : "The world's most photographed crossing — up to 2,500 people crossing simultaneously. Aerial view from Starbucks Reserve Roastery (level 1, bay window) or free from Scramble Square terrace.",
+                    tip: lang === "fr" ? "💡 Meilleure heure : 17h-19h à la tombée de la nuit (lumières + foule)" : "💡 Best time: 5-7pm at dusk (lights + crowd)",
+                    tag: lang === "fr" ? "Iconique" : "Iconic",
+                    color: "#7c3aed",
+                  },
+                  {
+                    time: lang === "fr" ? "17h30" : "5:30pm",
+                    label: lang === "fr" ? "Fin d'après-midi" : "Late afternoon",
+                    title: lang === "fr" ? "Tokyo Skytree ou Shinjuku Gyoen" : "Tokyo Skytree or Shinjuku Gyoen",
+                    desc: lang === "fr"
+                      ? "Option A (vue) : montez au Tokyo Skytree (634m, la plus haute tour du monde) pour un panorama à 360° sur la ville. Option B (zen) : le Shinjuku Gyoen, jardin impérial mixant styles japonais, français et anglais. Plus reposant après une journée chargée."
+                      : "Option A (view): Tokyo Skytree (634m, world's tallest tower) for 360° panorama. Option B (zen): Shinjuku Gyoen, imperial garden mixing Japanese, French and English styles. More relaxing after a busy day.",
+                    tip: lang === "fr" ? "💡 Skytree ~¥2 100 · Shinjuku Gyoen ~¥500 · Fermé le lundi" : "💡 Skytree ~¥2,100 · Shinjuku Gyoen ~¥500 · Closed Mondays",
+                    tag: lang === "fr" ? "Vue" : "View",
+                    color: "#0891b2",
+                  },
+                  {
+                    time: lang === "fr" ? "19h30" : "7:30pm",
+                    label: lang === "fr" ? "Soirée" : "Evening",
+                    title: lang === "fr" ? "Dîner : Izakaya à Kabukicho" : "Dinner: Izakaya in Kabukicho",
+                    desc: lang === "fr"
+                      ? "Quartier animé de Shinjuku. Choisissez un izakaya (bar-restaurant japonais typique) pour partager yakitoris, edamame, karaage et gyozas entre amis. Ambiance décontractée, budget raisonnable. La rue Omoide Yokocho (\"ruelle des souvenirs\") propose des petites brochettes de poulet grillé fumant à ~¥200 pièce."
+                      : "Animated Shinjuku district. Choose an izakaya (typical Japanese bar-restaurant) to share yakitori, edamame, karaage and gyoza. Relaxed atmosphere, reasonable budget. Omoide Yokocho (\"Memory Lane\") offers grilled chicken skewers for ~¥200 each.",
+                    tip: lang === "fr" ? "💡 Budget dîner + boissons : ~¥2 500-3 500/pers · Réservation non nécessaire" : "💡 Dinner + drinks budget: ~¥2,500-3,500/pp · No reservation needed",
+                    tag: lang === "fr" ? "Soirée" : "Evening",
+                    color: "#C9A84C",
+                  },
+                ].map((item, idx, arr) => (
+                  <div key={item.time} className="flex gap-4 py-4 border-b border-gray-50 last:border-0">
+                    <div className="flex-shrink-0 w-12 text-right">
+                      <div className="font-mono text-[10px] text-[#425C47]/40 mt-1">{item.time}</div>
                     </div>
                     <div className="relative flex-shrink-0 flex flex-col items-center">
-                      <div
-                        className="w-2.5 h-2.5 rounded-full mt-1 flex-shrink-0"
-                        style={{ backgroundColor: item.tagColor }}
-                      />
-                      <div className="w-px flex-1 bg-[#425C47]/10 mt-1" />
+                      <div className="w-2.5 h-2.5 rounded-full mt-1 flex-shrink-0" style={{ backgroundColor: item.color }} />
+                      {idx < arr.length - 1 && <div className="w-px flex-1 bg-gray-100 mt-1" />}
                     </div>
-                    <div className="pb-4 flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 pb-1">
                       <div className="flex items-start justify-between gap-2 mb-1">
                         <div>
-                          <div className="text-[10px] text-[#425C47]/35 mb-0.5">{item.label}</div>
-                          <div className="font-semibold text-sm text-[#425C47]">{item.title}</div>
+                          <div className="text-[9px] text-[#425C47]/35 uppercase tracking-wide mb-0.5">{item.label}</div>
+                          <div className="font-bold text-sm text-[#425C47]">{item.title}</div>
                         </div>
-                        <span
-                          className="text-[10px] font-medium px-2 py-0.5 rounded-full flex-shrink-0 text-white"
-                          style={{ backgroundColor: item.tagColor }}
-                        >
+                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 text-white" style={{ backgroundColor: item.color }}>
                           {item.tag}
                         </span>
                       </div>
-                      <p className="text-xs text-[#425C47]/55 leading-relaxed">{item.desc}</p>
+                      <p className="text-xs text-[#425C47]/60 leading-relaxed mb-1.5">{item.desc}</p>
+                      <p className="text-[10px] text-[#C9A84C] font-medium bg-[#C9A84C]/8 px-2 py-1 rounded-lg">{item.tip}</p>
                     </div>
                   </div>
                 ))}
-              </div>
-              <div className="mt-2 pt-4 border-t border-[#425C47]/8 text-center text-[10px] text-[#425C47]/30 font-mono tracking-wide">
-                {tx.example_day_footer}
+
+                {/* Budget du jour */}
+                <div className="mt-4 rounded-xl bg-[#425C47] text-white p-4">
+                  <div className="text-[10px] font-mono tracking-widest opacity-60 mb-2">
+                    {lang === "fr" ? "RÉCAPITULATIF JOUR 1" : "DAY 1 SUMMARY"}
+                  </div>
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    {[
+                      { label: lang === "fr" ? "Budget" : "Budget", val: "~55€" },
+                      { label: lang === "fr" ? "Activités" : "Activities", val: "7" },
+                      { label: lang === "fr" ? "Transport" : "Transport", val: "IC Card" },
+                    ].map(b => (
+                      <div key={b.label} className="bg-white/10 rounded-lg p-2">
+                        <div className="font-bold text-sm text-[#C9A84C]">{b.val}</div>
+                        <div className="text-[9px] opacity-60 uppercase tracking-wide">{b.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -881,8 +981,7 @@ export default function Home() {
           </div>
 
           <div className="max-w-xl mx-auto">
-            <p className="text-xl italic text-white/80 leading-relaxed mb-3">{tx.social_quote}</p>
-            <p className="text-sm text-white/45 font-semibold">{tx.social_quote_author}</p>
+            <p className="text-base text-white/50 italic">{tx.social_subtitle}</p>
           </div>
         </div>
       </section>
@@ -925,6 +1024,9 @@ export default function Home() {
             </a>
             <a href="/privacy" className="hover:text-[#425C47] underline underline-offset-2 transition-colors">
               {tx.footer_privacy}
+            </a>
+            <a href="/contact" className="hover:text-[#425C47] underline underline-offset-2 transition-colors">
+              {lang === "fr" ? "Contact" : "Contact"}
             </a>
             <span>{tx.footer_copy}</span>
           </div>

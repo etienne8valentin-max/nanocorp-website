@@ -12,6 +12,7 @@ import {
   removeCartItem,
   type CartItem,
 } from "@/lib/cart";
+import LangToggle from "@/components/LangToggle";
 
 const LEGAL_NOTICE =
   "Les horaires et jours d'ouverture des monuments et lieux recommandés dans votre guide sont fournis à titre indicatif. Spiregg ne peut être tenu responsable en cas de fermeture exceptionnelle, de modification d'horaires ou d'événements imprévus. Vérifiez les informations officielles avant chaque visite.";
@@ -134,18 +135,21 @@ function CartContent() {
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
-      <header className="sticky top-0 z-20 border-b border-[#1B2B4B]/10 bg-white/85 backdrop-blur-md">
+      <header className="sticky top-0 z-20 border-b border-[#425C47]/10 bg-white/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <Link
             href="/"
-            className="text-lg font-bold text-[#1B2B4B]"
+            className="text-lg font-bold text-[#425C47]"
             style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
           >
             TravelGuide AI
           </Link>
-          <Link href="/#pricing" className="rounded-full border border-[#1B2B4B]/15 px-4 py-2 text-sm font-semibold text-[#1B2B4B] hover:border-[#c9a84c]">
-            Continuer mes achats
-          </Link>
+          <div className="flex items-center gap-3">
+            <LangToggle />
+            <Link href="/#pricing" className="rounded-full border border-[#425C47]/15 px-4 py-2 text-sm font-semibold text-[#425C47] hover:border-[#c9a84c]">
+              Continuer mes achats
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -153,20 +157,20 @@ function CartContent() {
         <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#c9a84c]">Panier</p>
-            <h1 className="mt-2 text-3xl font-bold text-[#1B2B4B]" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
+            <h1 className="mt-2 text-3xl font-bold text-[#425C47]" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
               Vos guides à commander
             </h1>
           </div>
-          <p className="text-sm text-[#1B2B4B]/55">{items.length} article{items.length > 1 ? "s" : ""}</p>
+          <p className="text-sm text-[#425C47]/55">{items.length} article{items.length > 1 ? "s" : ""}</p>
         </div>
 
         {items.length === 0 ? (
-          <section className="rounded-[2rem] border border-[#1B2B4B]/10 bg-white p-8 text-center shadow-sm">
+          <section className="rounded-[2rem] border border-[#425C47]/10 bg-white p-8 text-center shadow-sm">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#c9a84c]/15 text-3xl">🛒</div>
-            <h2 className="text-2xl font-bold text-[#1B2B4B]" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
+            <h2 className="text-2xl font-bold text-[#425C47]" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
               Votre panier est vide.
             </h2>
-            <p className="mt-3 text-sm text-[#1B2B4B]/60">Ajoutez un guide personnalisé avant de passer au paiement.</p>
+            <p className="mt-3 text-sm text-[#425C47]/60">Ajoutez un guide personnalisé avant de passer au paiement.</p>
             <Link href="/#pricing" className="mt-6 inline-flex rounded-full bg-[#c9a84c] px-6 py-3 text-sm font-bold text-white hover:bg-[#b8962e]">
               Commencer un guide →
             </Link>
@@ -175,8 +179,8 @@ function CartContent() {
           <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
             <section className="space-y-4">
               {items.map((item, index) => (
-                <article key={item.id} className="overflow-hidden rounded-[1.75rem] border border-[#1B2B4B]/10 bg-white shadow-sm">
-                  <div className="border-b border-[#1B2B4B]/8 bg-[#1B2B4B] px-5 py-4 text-white">
+                <article key={item.id} className="overflow-hidden rounded-[1.75rem] border border-[#425C47]/10 bg-white shadow-sm">
+                  <div className="border-b border-[#425C47]/8 bg-[#425C47] px-5 py-4 text-white">
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c9a84c]">Guide #{index + 1}</p>
@@ -190,23 +194,23 @@ function CartContent() {
 
                   <div className="grid gap-4 p-5 sm:grid-cols-3">
                     <div className="rounded-2xl bg-[#F8F4EF] p-4">
-                      <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#1B2B4B]/45">📅 Dates</p>
-                      <p className="mt-1 text-sm font-semibold text-[#1B2B4B]">{item.dates || "À confirmer"}</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#425C47]/45">📅 Dates</p>
+                      <p className="mt-1 text-sm font-semibold text-[#425C47]">{item.dates || "À confirmer"}</p>
                     </div>
                     <div className="rounded-2xl bg-[#F8F4EF] p-4">
-                      <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#1B2B4B]/45">📦 Durée</p>
-                      <p className="mt-1 text-sm font-semibold text-[#1B2B4B]">{item.planLabel}</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#425C47]/45">📦 Durée</p>
+                      <p className="mt-1 text-sm font-semibold text-[#425C47]">{item.planLabel}</p>
                     </div>
                     <div className="rounded-2xl bg-[#F8F4EF] p-4">
-                      <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#1B2B4B]/45">💶 Prix</p>
-                      <p className="mt-1 text-sm font-semibold text-[#1B2B4B]">{formatEuro(item.price)}</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#425C47]/45">💶 Prix</p>
+                      <p className="mt-1 text-sm font-semibold text-[#425C47]">{formatEuro(item.price)}</p>
                     </div>
                   </div>
 
                   <div className="flex flex-wrap gap-3 px-5 pb-5">
                     <Link
                       href={`/questionnaire?edit=${encodeURIComponent(item.id)}&plan=${item.planId}`}
-                      className="rounded-full border border-[#1B2B4B]/15 px-4 py-2 text-sm font-bold text-[#1B2B4B] hover:border-[#c9a84c] hover:text-[#9A7629]"
+                      className="rounded-full border border-[#425C47]/15 px-4 py-2 text-sm font-bold text-[#425C47] hover:border-[#c9a84c] hover:text-[#9A7629]"
                     >
                       ✏️ Modifier
                     </Link>
@@ -222,22 +226,22 @@ function CartContent() {
               ))}
             </section>
 
-            <aside className="h-fit rounded-[1.75rem] border border-[#1B2B4B]/10 bg-white p-6 shadow-sm lg:sticky lg:top-24">
-              <h2 className="text-lg font-bold text-[#1B2B4B]" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
+            <aside className="h-fit rounded-[1.75rem] border border-[#425C47]/10 bg-white p-6 shadow-sm lg:sticky lg:top-24">
+              <h2 className="text-lg font-bold text-[#425C47]" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
                 Récapitulatif
               </h2>
 
-              <div className="mt-5 space-y-3 border-b border-[#1B2B4B]/10 pb-5">
+              <div className="mt-5 space-y-3 border-b border-[#425C47]/10 pb-5">
                 {items.map((item) => (
-                  <div key={item.id} className="flex justify-between gap-4 text-sm text-[#1B2B4B]/65">
+                  <div key={item.id} className="flex justify-between gap-4 text-sm text-[#425C47]/65">
                     <span>{CART_PLANS[item.planId].duration} · {item.destination}</span>
-                    <span className="font-semibold text-[#1B2B4B]">{formatEuro(item.price)}</span>
+                    <span className="font-semibold text-[#425C47]">{formatEuro(item.price)}</span>
                   </div>
                 ))}
               </div>
 
               <div className="mt-5">
-                <label className="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#1B2B4B]/45">Code promo</label>
+                <label className="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#425C47]/45">Code promo</label>
                 <div className="flex gap-2">
                   <div className="relative min-w-0 flex-1">
                     <input
@@ -258,7 +262,7 @@ function CartContent() {
                           ? "promo-input-valid bg-emerald-50"
                           : promoState === "invalid"
                           ? "promo-input-invalid bg-red-50"
-                          : "border-[#1B2B4B]/15 bg-[#F8F4EF] focus:border-[#c9a84c]"
+                          : "border-[#425C47]/15 bg-[#F8F4EF] focus:border-[#c9a84c]"
                       }`}
                     />
                     {/* Icône état */}
@@ -282,7 +286,7 @@ function CartContent() {
                   </button>
                 </div>
                 {promoMessage && (
-                  <p className="mt-2 text-xs text-[#1B2B4B]/55">
+                  <p className="mt-2 text-xs text-[#425C47]/55">
                     {promoMessage}
                     {promoProfileUrl && (
                       <> <Link href={promoProfileUrl} className="font-semibold underline">Ouvrir le profil</Link></>
@@ -296,7 +300,7 @@ function CartContent() {
                 <p className="mt-2 text-xs leading-relaxed text-amber-900/90">{LEGAL_NOTICE}</p>
               </div>
 
-              <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-[#1B2B4B]/10 bg-[#F8F4EF] p-4 text-xs leading-relaxed text-[#1B2B4B]/75 hover:bg-[#f3ede5]">
+              <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-[#425C47]/10 bg-[#F8F4EF] p-4 text-xs leading-relaxed text-[#425C47]/75 hover:bg-[#f3ede5]">
                 <input
                   type="checkbox"
                   checked={termsAccepted}
@@ -312,7 +316,7 @@ function CartContent() {
               </label>
               {termsError && <p className="mt-2 text-center text-xs font-semibold text-red-500">{termsError}</p>}
 
-              <div className="mt-5 border-t border-[#1B2B4B]/10 pt-5">
+              <div className="mt-5 border-t border-[#425C47]/10 pt-5">
                 {/* Badge économies */}
                 {promoApplied && (
                   <div className="promo-badge-appear mb-3 flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2">
@@ -328,7 +332,7 @@ function CartContent() {
                   </div>
                 )}
 
-                <div className="flex items-center justify-between text-[#1B2B4B]">
+                <div className="flex items-center justify-between text-[#425C47]">
                   <span className="font-bold">Total</span>
                   <div className="flex flex-col items-end gap-0.5">
                     {/* Ancien prix barré */}
@@ -366,7 +370,7 @@ function CartContent() {
                   )}
                 </p>
               )}
-              <p className="mt-3 text-center text-[11px] text-[#1B2B4B]/40">Paiement 100% sécurisé via Stripe · Une seule transaction</p>
+              <p className="mt-3 text-center text-[11px] text-[#425C47]/40">Paiement 100% sécurisé via Stripe · Une seule transaction</p>
             </aside>
           </div>
         )}

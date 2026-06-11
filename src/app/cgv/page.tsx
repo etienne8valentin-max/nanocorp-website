@@ -6,7 +6,7 @@ import Link from "next/link";
 const content = {
   fr: {
     lang: "FR",
-    other: "EN",
+    other: "🇬🇧",
     title: "Conditions Générales de Vente",
     subtitle: "TravelGuide AI — Version du [DATE À COMPLÉTER]",
     back: "← Retour au site",
@@ -175,7 +175,7 @@ Règlement en ligne des litiges UE : https://ec.europa.eu/consumers/odr/`,
   },
   en: {
     lang: "EN",
-    other: "FR",
+    other: "🇫🇷",
     title: "Terms of Sale",
     subtitle: "TravelGuide AI — Version [DATE]",
     back: "← Back to site",
@@ -338,7 +338,8 @@ export default function CGVPage() {
           </Link>
           <button
             onClick={() => setLang(lang === "fr" ? "en" : "fr")}
-            className="text-xs font-semibold px-3 py-1.5 rounded-full border border-[#425C47]/20 hover:bg-[#425C47] hover:text-white transition-colors"
+            className="text-xl border border-[#425C47]/20 rounded-md px-2 py-1 hover:bg-[#425C47]/8 transition-all"
+            title={lang === "fr" ? "Switch to English" : "Passer en français"}
           >
             {t.other}
           </button>

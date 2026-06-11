@@ -1,11 +1,12 @@
 import Link from "next/link";
 import AdminLogoutButton from "@/components/admin/AdminLogoutButton";
 
-export default function AdminShell({ active, children }: { active: "dashboard" | "users"; children: React.ReactNode }) {
+export default function AdminShell({ active, children }: { active?: string; children: React.ReactNode }) {
   const links = [
-    { key: "dashboard", href: "/admin", label: "Dashboard" },
-    { key: "orders", href: "/admin", label: "Commandes" },
-    { key: "users", href: "/admin/users", label: "Utilisateurs" },
+    { key: "dashboard", href: "/admin", label: "📊 Dashboard" },
+    { key: "orders", href: "/admin", label: "📦 Commandes" },
+    { key: "users", href: "/admin/users", label: "👥 Utilisateurs" },
+    { key: "contacts", href: "/admin/contacts", label: "📬 Messages" },
   ];
 
   return (

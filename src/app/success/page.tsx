@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
+import LangToggle from "@/components/LangToggle";
 
 function SuccessContent() {
   const params = useSearchParams();
@@ -19,7 +20,7 @@ function SuccessContent() {
     >
       {/* Header */}
       <header className="border-b border-[#425C47]/10 bg-white/80 backdrop-blur-sm">
-        <div className="max-w-3xl mx-auto px-6 py-4">
+        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link
             href="/"
             className="text-lg font-bold text-[#425C47]"
@@ -27,6 +28,7 @@ function SuccessContent() {
           >
             TravelGuide AI
           </Link>
+          <LangToggle />
         </div>
       </header>
 

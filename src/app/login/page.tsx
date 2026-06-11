@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import LangToggle from "@/components/LangToggle";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -41,10 +42,12 @@ export default function LoginPage() {
       style={{ background: "#FDFAF5", fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
     >
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-block text-2xl font-bold" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}>
+        <div className="flex items-center justify-between mb-8">
+          <div />
+          <Link href="/" className="text-2xl font-bold" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}>
             ✈️ TravelGuide AI
           </Link>
+          <LangToggle />
         </div>
 
         <div className="rounded-2xl p-8 shadow-lg" style={{ background: "#fff", border: "1px solid #E8E0D0" }}>

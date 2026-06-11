@@ -4,6 +4,7 @@ import { getServerSession } from "@/lib/auth";
 import { getPool } from "@/lib/db";
 import LogoutButton from "@/components/LogoutButton";
 import PhoneVerification from "@/components/PhoneVerification";
+import LangToggle from "@/components/LangToggle";
 import { getPhoneStatus } from "@/lib/phone-verification";
 
 const PLAN_LABELS: Record<string, string> = {
@@ -70,7 +71,8 @@ export default async function AccountPage() {
           ✈️ TravelGuide AI
         </Link>
         <div className="flex items-center gap-4">
-          <span className="text-sm" style={{ color: "#C9A84C" }}>{session.email}</span>
+          <LangToggle />
+          <span className="text-sm hidden sm:inline" style={{ color: "#C9A84C" }}>{session.email}</span>
           <LogoutButton />
         </div>
       </nav>

@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { clearCart } from "@/lib/cart";
+import LangToggle from "@/components/LangToggle";
 
 const PLAN_LABELS: Record<string, string> = {
   "3j": "Guide Express — 3 jours",
@@ -80,6 +81,7 @@ function SuccessContent() {
       className="min-h-screen bg-[#F8F4EF] flex items-center justify-center px-6 py-12"
       style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
     >
+      <div className="fixed top-4 right-4 z-50"><LangToggle /></div>
       <div className="max-w-xl w-full">
         <div className="rounded-[2rem] border border-[#E8E0D0] bg-white p-7 text-center shadow-[0_24px_80px_rgba(26,26,46,0.12)]">
           <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
