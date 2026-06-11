@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -47,7 +47,7 @@ export default function PhoneForm({ initialPhone }: { initialPhone?: string | nu
           onClick={handleSave}
           disabled={saving || !phone.trim()}
           className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white disabled:opacity-60 disabled:cursor-not-allowed"
-          style={{ background: "#1B2A4A" }}
+          style={{ background: "#425C47" }}
         >
           {saving ? "…" : "Enregistrer"}
         </button>

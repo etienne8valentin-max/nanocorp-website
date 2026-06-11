@@ -122,7 +122,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
   return (
     <div className="min-h-screen" style={{ background: "#FDFAF5", fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
       {/* Navbar */}
-      <nav className="sticky top-0 z-10 px-6 py-4 flex items-center justify-between" style={{ background: "#1B2A4A" }}>
+      <nav className="sticky top-0 z-10 px-6 py-4 flex items-center justify-between" style={{ background: "#425C47" }}>
         <Link href="/" className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
           ✈️ TravelGuide AI
         </Link>
@@ -139,7 +139,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
         <div className="rounded-2xl p-6" style={{ background: "#fff", border: "1px solid #E8E0D0" }}>
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div>
-              <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1B2A4A" }}>
+              <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}>
                 {order.destination ?? "Destination à définir"}
               </h1>
               <div className="flex items-center gap-2 flex-wrap">
@@ -160,7 +160,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                 target="_blank"
                 rel="noopener noreferrer"
                 className="shrink-0 rounded-xl px-5 py-2.5 font-semibold text-sm transition-all inline-flex items-center gap-2"
-                style={{ background: "#C9A84C", color: "#1B2A4A" }}
+                style={{ background: "#C9A84C", color: "#425C47" }}
               >
                 📥 Télécharger mon guide
               </a>
@@ -193,27 +193,76 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
           )}
         </div>
 
+        {/* Carte interactive pleine largeur pour 14j et 1 mois */}
+        {(order.plan === "14j" || order.plan === "1mois") && (
+          <div className="rounded-2xl p-6" style={{ background: "#fff", border: "2px solid #425C47" }}>
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mr-2" style={{ background: "#d4e0d6", color: "#425C47" }}>
+                  ✨ Inclus dans votre plan
+                </span>
+                <h2 className="text-base font-bold mt-2" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}>
+                  🗺️ Carte interactive de votre destination
+                </h2>
+              </div>
+            </div>
+            <DestinationMapWrapper destination={order.destination} />
+            {order.destination && (
+              <p className="text-xs mt-3 text-center" style={{ color: "#7a7060" }}>
+                📍 {order.destination} · Zoomez et explorez votre destination
+              </p>
+            )}
+          </div>
+        )}
+
         <div className="grid gap-6 md:grid-cols-2">
           {/* Timeline */}
           <div className="rounded-2xl p-6" style={{ background: "#fff", border: "1px solid #E8E0D0" }}>
-            <h2 className="text-base font-bold mb-4" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1B2A4A" }}>
+            <h2 className="text-base font-bold mb-4" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}>
               Progression de votre commande
             </h2>
             <OrderTimeline steps={steps} />
           </div>
 
-          {/* Map */}
-          <div className="rounded-2xl p-6" style={{ background: "#fff", border: "1px solid #E8E0D0" }}>
-            <h2 className="text-base font-bold mb-4" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1B2A4A" }}>
-              Votre destination
-            </h2>
-            <DestinationMapWrapper destination={order.destination} />
-            {order.destination && (
-              <p className="text-xs mt-2 text-center" style={{ color: "#7a7060" }}>
-                📍 {order.destination}
-              </p>
-            )}
-          </div>
+          {/* Map petite pour 3j et 7j */}
+          {(order.plan === "3j" || order.plan === "7j") && (
+            <div className="rounded-2xl p-6" style={{ background: "#fff", border: "1px solid #E8E0D0" }}>
+              <h2 className="text-base font-bold mb-4" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}>
+                Votre destination
+              </h2>
+              <DestinationMapWrapper destination={order.destination} />
+              {order.destination && (
+                <p className="text-xs mt-2 text-center" style={{ color: "#7a7060" }}>
+                  📍 {order.destination}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Pour 14j/1mois : timeline seule dans la grille */}
+          {(order.plan === "14j" || order.plan === "1mois") && (
+            <div className="rounded-2xl p-6" style={{ background: "#fff", border: "1px solid #E8E0D0" }}>
+              <h2 className="text-base font-bold mb-4" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}>
+                📋 Récapitulatif du plan
+              </h2>
+              <div className="space-y-2 text-sm" style={{ color: "#425C47" }}>
+                <div className="flex justify-between py-2 border-b" style={{ borderColor: "#E8E0D0" }}>
+                  <span>Plan</span>
+                  <strong>{PLAN_LABELS[order.plan]}</strong>
+                </div>
+                <div className="flex justify-between py-2 border-b" style={{ borderColor: "#E8E0D0" }}>
+                  <span>Destination</span>
+                  <strong>{order.destination ?? "—"}</strong>
+                </div>
+                {order.travel_dates && (
+                  <div className="flex justify-between py-2">
+                    <span>Dates</span>
+                    <strong>{order.travel_dates}</strong>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Questionnaire CTA */}

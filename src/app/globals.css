@@ -9,6 +9,32 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ── Newsletter popup ────────────────────────────── */
+@keyframes slide-up {
+  0%   { opacity: 0; transform: translateY(20px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ── Mobile touch & readability ──────────────────── */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Empêche le zoom iOS sur les inputs */
+input, textarea, select {
+  font-size: 16px !important;
+}
+
+@media (min-width: 640px) {
+  input, textarea, select {
+    font-size: inherit !important;
+  }
+}
+
 body {
   background: #ffffff;
   color: #425C47;
@@ -90,6 +116,41 @@ body {
 
 .animate-phone-success {
   animation: phone-success 320ms ease-out;
+}
+
+/* ── Promo input feedback ────────────────────────── */
+@keyframes input-pulse-success {
+  0%   { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+  60%  { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+@keyframes checkmark-pop {
+  0%   { opacity: 0; transform: scale(0) rotate(-45deg); }
+  60%  { transform: scale(1.2) rotate(5deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%  { transform: translateX(-5px); }
+  40%  { transform: translateX(5px); }
+  60%  { transform: translateX(-4px); }
+  80%  { transform: translateX(4px); }
+}
+
+.promo-input-valid {
+  border-color: #10b981 !important;
+  animation: input-pulse-success 0.6s ease-out;
+}
+
+.promo-input-invalid {
+  border-color: #ef4444 !important;
+  animation: shake 0.4s ease-out;
+}
+
+.promo-checkmark {
+  animation: checkmark-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 /* ── Promo price animation ───────────────────────── */

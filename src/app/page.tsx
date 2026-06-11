@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CART_UPDATED_EVENT, getCartCount } from "@/lib/cart";
+import NewsletterPopup from "@/components/NewsletterPopup";
 
 type Lang = "fr" | "en";
 
@@ -10,12 +11,13 @@ type PhoneStatus = {
   loggedIn: boolean;
   phone: string | null;
   phoneVerified: boolean;
+  welcomeUsed: boolean;
 };
 
 const translations = {
   fr: {
     banner_messages: [
-      "🎁 Guide 3 jours GRATUIT avec le code EXPLORE3",
+      "🏷️ -40% sur votre premier guide avec le code WELCOME",
       "✈️ Jusqu'à 10€ économisés · Livraison 24h · Sans abonnement",
       "🌍 Paris · Tokyo · Bali · Bangkok · New York · et partout dans le monde",
     ],
@@ -48,8 +50,8 @@ const translations = {
     pricing_title: "Choisissez votre aventure",
     pricing_sub:
       "Chaque plan inclut tout ce que comprend le plan précédent, plus des fonctionnalités supplémentaires.",
-    gift_tooltip: "Gratuit avec numéro vérifié !",
-    gift_unlocked_tooltip: "🎁 Déjà débloqué !",
+    gift_tooltip: "-40% avec le code WELCOME (1 fois, tél. vérifié)",
+    gift_unlocked_tooltip: "✅ Code WELCOME disponible !",
     plans: [
       {
         name: "Guide Express",
@@ -132,7 +134,7 @@ const translations = {
       { number: "12 000+", label: "clients satisfaits" },
       { number: "4.9★", label: "note moyenne" },
       { number: "98%", label: "de satisfaction" },
-      { number: "50+", label: "destinations" },
+      { number: "500+", label: "destinations" },
     ],
     social_quote: "\"Pour 3€, j'ai économisé des heures de recherche. Le guide a tout anticipé.\"",
     social_quote_author: "— Thomas L., Lyon → New York",
@@ -180,7 +182,7 @@ const translations = {
   },
   en: {
     banner_messages: [
-      "🎁 3-day Guide FREE with code EXPLORE3",
+      "🏷️ -40% on your first guide with code WELCOME",
       "✈️ Save up to €10 · 24h delivery · No subscription",
       "🌍 Paris · Tokyo · Bali · Bangkok · New York · and anywhere worldwide",
     ],
@@ -212,8 +214,8 @@ const translations = {
     ],
     pricing_title: "Choose your adventure",
     pricing_sub: "Each plan includes everything from the previous plan, plus additional features.",
-    gift_tooltip: "Free with a verified phone number!",
-    gift_unlocked_tooltip: "🎁 Already unlocked!",
+    gift_tooltip: "-40% with code WELCOME (once, verified phone)",
+    gift_unlocked_tooltip: "✅ WELCOME code available!",
     plans: [
       {
         name: "Express Guide",
@@ -296,7 +298,7 @@ const translations = {
       { number: "12,000+", label: "happy customers" },
       { number: "4.9★", label: "average rating" },
       { number: "98%", label: "satisfaction rate" },
-      { number: "50+", label: "destinations" },
+      { number: "500+", label: "destinations" },
     ],
     social_quote: "\"For €3, I saved hours of research. The guide anticipated everything I needed.\"",
     social_quote_author: "— Thomas L., Lyon → New York",
@@ -347,7 +349,7 @@ const translations = {
 export default function Home() {
   const [lang, setLang] = useState<Lang>("fr");
   const [cartCount, setCartCount] = useState(0);
-  const [phoneStatus, setPhoneStatus] = useState<PhoneStatus>({ loggedIn: false, phone: null, phoneVerified: false });
+  const [phoneStatus, setPhoneStatus] = useState<PhoneStatus>({ loggedIn: false, phone: null, phoneVerified: false, welcomeUsed: false });
   const tx = translations[lang];
 
   useEffect(() => {
@@ -392,6 +394,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen text-[#425C47]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+      <NewsletterPopup />
 
       {/* LAUNCH BANNER */}
       <div className="banner-ticker-wrap fixed top-0 w-full z-[60] bg-gradient-to-r from-[#C9A84C] via-[#E8C060] to-[#C9A84C] text-[#425C47] overflow-hidden h-12 flex items-center justify-center cursor-default">
@@ -404,7 +407,7 @@ export default function Home() {
 
       {/* NAV */}
       <nav className="fixed top-12 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-[0_1px_16px_rgba(0,0,0,0.05)]">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div className="text-xl font-bold tracking-tight" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
             TravelGuide AI
           </div>
@@ -469,24 +472,24 @@ export default function Home() {
               </span>
             </div>
             <h1
-              className="text-6xl lg:text-7xl xl:text-8xl font-bold leading-none mb-6"
+              className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-bold leading-tight sm:leading-none mb-5 sm:mb-6"
               style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
             >
               {tx.hero_title}
             </h1>
-            <p className="text-xl text-[#425C47]/70 max-w-lg leading-relaxed mb-10 font-medium">{tx.hero_sub}</p>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <p className="text-base sm:text-xl text-[#425C47]/70 max-w-lg leading-relaxed mb-8 sm:mb-10 font-medium">{tx.hero_sub}</p>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
               <a
                 href="#pricing"
                 onClick={() => trackCTA("hero")}
-                className="bg-gradient-to-br from-[#425C47] to-[#2e4133] text-white font-bold px-8 py-4 rounded-full hover:from-[#2e4133] hover:to-[#1f2e22] transition-all hover:scale-105 text-base shadow-[0_8px_30px_rgba(66,92,71,0.35)]"
+                className="bg-gradient-to-br from-[#425C47] to-[#2e4133] text-white font-bold px-8 py-4 rounded-full hover:from-[#2e4133] hover:to-[#1f2e22] transition-all hover:scale-105 text-base shadow-[0_8px_30px_rgba(66,92,71,0.35)] text-center"
               >
                 {tx.hero_cta} →
               </a>
-              <p className="text-sm text-[#425C47]/45">{tx.hero_sub_cta}</p>
+              <p className="text-sm text-[#425C47]/45 text-center sm:text-left">{tx.hero_sub_cta}</p>
             </div>
             {/* Trust badges */}
-            <div className="flex items-center gap-6 mt-10">
+            <div className="flex items-center gap-4 sm:gap-6 mt-8 sm:mt-10">
               {[
                 { val: "24h", label: tx.hero_badge_delivery },
                 { val: "100%", label: tx.hero_badge_custom },
@@ -506,7 +509,7 @@ export default function Home() {
           </div>
 
           {/* Right: Preview card */}
-          <div className="relative flex justify-center lg:justify-end">
+          <div className="relative hidden sm:flex justify-center lg:justify-end">
             <div className="animate-float relative">
               <div className="bg-white rounded-2xl shadow-2xl p-7 border border-[#425C47]/5 w-full max-w-sm">
                 <div className="bg-[#425C47] text-white rounded-xl p-5 mb-5">
@@ -560,7 +563,7 @@ export default function Home() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="relative py-32 px-6 text-white overflow-hidden">
+      <section className="relative py-16 sm:py-32 px-4 sm:px-6 text-white overflow-hidden">
         {/* Beach photo */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -581,7 +584,7 @@ export default function Home() {
               </span>
             </div>
             <h2
-              className="text-4xl lg:text-5xl font-bold mb-4"
+              className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-4"
               style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
             >
               {tx.how_title}
@@ -616,11 +619,11 @@ export default function Home() {
       </section>
 
       {/* PRICING */}
-      <section className="scroll-mt-28 py-24 px-6 bg-[#F5F7F5]" id="pricing">
+      <section className="scroll-mt-28 py-14 sm:py-24 px-4 sm:px-6 bg-[#F5F7F5]" id="pricing">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2
-              className="text-4xl lg:text-5xl font-bold mb-4"
+              className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-4"
               style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
             >
               {tx.pricing_title}
@@ -630,8 +633,8 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {tx.plans.map((plan) => {
               const isInverted = plan.popular;
-              const isGiftPlan = plan.plan_key === "3j";
-              const giftUnlocked = isGiftPlan && phoneStatus.loggedIn && phoneStatus.phoneVerified;
+              const isGiftPlan = !phoneStatus.welcomeUsed; // disparaît si déjà utilisé
+              const giftUnlocked = phoneStatus.loggedIn && phoneStatus.phoneVerified && !phoneStatus.welcomeUsed;
               const giftTooltip = giftUnlocked ? tx.gift_unlocked_tooltip : tx.gift_tooltip;
               return (
                 <div
@@ -750,11 +753,11 @@ export default function Home() {
       </section>
 
       {/* VISUAL EXAMPLES */}
-      <section className="py-24 px-6 bg-white">
+      <section className="py-14 sm:py-24 px-4 sm:px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2
-              className="text-4xl lg:text-5xl font-bold mb-4"
+              className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-4"
               style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
             >
               {tx.examples_title}
@@ -850,10 +853,10 @@ export default function Home() {
       </section>
 
       {/* SOCIAL PROOF */}
-      <section className="py-24 px-6 bg-gradient-to-br from-[#2e4133] via-[#425C47] to-[#2e4133] text-white">
+      <section className="py-14 sm:py-24 px-4 sm:px-6 bg-gradient-to-br from-[#2e4133] via-[#425C47] to-[#2e4133] text-white">
         <div className="max-w-5xl mx-auto text-center">
           <h2
-            className="text-4xl lg:text-5xl font-bold mb-4"
+            className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-4"
             style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
           >
             {tx.social_title}
@@ -867,7 +870,7 @@ export default function Home() {
                 className="bg-white/8 border border-white/12 rounded-2xl px-6 py-8 flex flex-col items-center gap-2 hover:bg-white/12 transition-colors"
               >
                 <span
-                  className="text-5xl lg:text-6xl font-black text-[#C9A84C] leading-none"
+                  className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#C9A84C] leading-none"
                   style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
                 >
                   {stat.number}
@@ -885,11 +888,11 @@ export default function Home() {
       </section>
 
       {/* BOTTOM CTA */}
-      <section className="py-24 px-6 bg-gradient-to-br from-[#1a2e1f] via-[#2e4133] to-[#1a2e1f] text-white text-center">
+      <section className="py-14 sm:py-24 px-4 sm:px-6 bg-gradient-to-br from-[#1a2e1f] via-[#2e4133] to-[#1a2e1f] text-white text-center">
         <div className="max-w-2xl mx-auto">
           <div className="text-5xl mb-6">✈️</div>
           <h2
-            className="text-4xl lg:text-5xl font-bold mb-5"
+            className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-5"
             style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
           >
             {tx.bottom_title}

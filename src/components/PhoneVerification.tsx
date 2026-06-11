@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -170,7 +170,7 @@ export default function PhoneVerification({ initialPhone, initialVerified = fals
           <div>
             <p className="font-bold">Numéro vérifié</p>
             <p className="text-sm text-emerald-700">{verifiedPhone ? maskPhone(verifiedPhone) : "Votre numéro est validé."}</p>
-            <p className="mt-2 text-xs text-emerald-700">Le Guide 3 jours gratuit est débloqué avec le code EXPLORE3.</p>
+            <p className="mt-2 text-xs text-emerald-700">Le code WELCOME (-40% sur votre premier guide) est maintenant débloqué !</p>
           </div>
         </div>
       </div>
@@ -182,8 +182,8 @@ export default function PhoneVerification({ initialPhone, initialVerified = fals
       <div className="flex items-start gap-3">
         <span className="rounded-2xl bg-[#fdf8f0] p-3 text-2xl shadow-inner">📱</span>
         <div>
-          <h3 className="font-bold" style={{ color: "#1B2A4A" }}>Vérification téléphone</h3>
-          <p className="text-sm" style={{ color: "#7a7060" }}>Recevez un code SMS à 6 chiffres pour débloquer le Guide 3 jours gratuit.</p>
+          <h3 className="font-bold" style={{ color: "#425C47" }}>Vérification téléphone</h3>
+          <p className="text-sm" style={{ color: "#7a7060" }}>Recevez un code SMS pour débloquer le code WELCOME (-40% sur votre premier guide).</p>
         </div>
       </div>
 
@@ -218,7 +218,7 @@ export default function PhoneVerification({ initialPhone, initialVerified = fals
             type="button"
             onClick={sendOtp}
             disabled={sending || digitsOnly(localNumber).length < 6}
-            className="w-full rounded-xl bg-[#1B2A4A] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#111d35] disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-xl bg-[#425C47] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#111d35] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {sending ? "Envoi du code…" : "Envoyer le code"}
           </button>
@@ -240,7 +240,7 @@ export default function PhoneVerification({ initialPhone, initialVerified = fals
                 inputMode="numeric"
                 autoComplete={index === 0 ? "one-time-code" : "off"}
                 maxLength={1}
-                className="h-12 w-11 rounded-xl border border-[#E8E0D0] bg-[#FDFAF5] text-center text-lg font-bold text-[#1B2A4A] outline-none transition focus:border-[#c9a84c] focus:ring-2 focus:ring-[#c9a84c]/20 sm:h-14 sm:w-12"
+                className="h-12 w-11 rounded-xl border border-[#E8E0D0] bg-[#FDFAF5] text-center text-lg font-bold text-[#425C47] outline-none transition focus:border-[#c9a84c] focus:ring-2 focus:ring-[#c9a84c]/20 sm:h-14 sm:w-12"
               />
             ))}
           </div>
@@ -256,7 +256,7 @@ export default function PhoneVerification({ initialPhone, initialVerified = fals
             type="button"
             onClick={sendOtp}
             disabled={sending || countdown > 0}
-            className="text-sm font-semibold text-[#1B2A4A] underline-offset-4 hover:underline disabled:cursor-not-allowed disabled:text-[#9a8f80]"
+            className="text-sm font-semibold text-[#425C47] underline-offset-4 hover:underline disabled:cursor-not-allowed disabled:text-[#9a8f80]"
           >
             {countdown > 0 ? `Renvoyer le code dans ${countdown}s` : "Renvoyer le code"}
           </button>

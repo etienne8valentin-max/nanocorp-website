@@ -24,6 +24,7 @@ function CartContent() {
   const [promoProfileUrl, setPromoProfileUrl] = useState<string | null>(null);
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoSavings, setPromoSavings] = useState(0);
+  const [promoState, setPromoState] = useState<"idle" | "valid" | "invalid">("idle");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [checkoutProfileUrl, setCheckoutProfileUrl] = useState<string | null>(null);
@@ -37,18 +38,7 @@ function CartContent() {
   const total = getCartTotal(items);
   const firstPlanId = items[0]?.planId;
 
-  useEffect(() => {
-    queueMicrotask(() => {
-      if (firstPlanId === "3j") {
-        setPromoCode((currentCode) => currentCode.trim() ? currentCode : "EXPLORE3");
-        return;
-      }
-
-      setPromoCode((currentCode) => currentCode.trim().toUpperCase() === "EXPLORE3" ? "" : currentCode);
-      setPromoMessage("");
-      setPromoProfileUrl(null);
-    });
-  }, [firstPlanId]);
+  // Pas d'auto-remplissage — l'utilisateur saisit WELCOME manuellement
 
   function handleRemove(itemId: string) {
     removeCartItem(itemId);
@@ -77,15 +67,15 @@ function CartContent() {
       if (!res.ok || !data.valid) {
         setPromoMessage(data.message ?? "Code promo invalide ou expiré.");
         setPromoProfileUrl(data.profileUrl ?? null);
+        setPromoState("invalid");
         return;
       }
 
       setPromoApplied(true);
-      const isFreePromo = normalizedCode === "EXPLORE3" && firstPlanId === "3j" && items.length === 1;
-      setPromoSavings(isFreePromo ? total : 0);
-      setPromoMessage(isFreePromo
-        ? `Code ${normalizedCode} appliqué — Guide 3 jours offert avec numéro vérifié !`
-        : `Code ${normalizedCode} appliqué. La réduction sera déduite au paiement.`);
+      setPromoState("valid");
+      const savings = Math.round(total * 0.4); // -40%
+      setPromoSavings(savings);
+      setPromoMessage(`Code ${normalizedCode} appliqué — -40% sur votre commande ! 🎉`);
     } catch {
       setPromoMessage("Erreur serveur, réessayez.");
     }
@@ -111,35 +101,7 @@ function CartContent() {
 
     try {
       const normalizedPromoCode = promoCode.trim().toUpperCase();
-      const shouldCreateFreeOrder = items.length === 1 && items[0].planId === "3j" && normalizedPromoCode === "EXPLORE3";
-
-      if (shouldCreateFreeOrder) {
-        const [item] = items;
-        const res = await fetch("/api/free-order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            promoCode: normalizedPromoCode,
-            planKey: item.planId,
-            item: {
-              planId: item.planId,
-              destination: item.destination,
-              dates: item.dates,
-              criteria: item.criteria,
-            },
-          }),
-        });
-        const data = await res.json();
-
-        if (!res.ok || !data.success || !data.redirectUrl) {
-          setCheckoutProfileUrl(data.profileUrl ?? null);
-          throw new Error(data.message ?? "Impossible de créer la commande gratuite.");
-        }
-
-        clearCart();
-        router.push(data.redirectUrl);
-        return;
-      }
+      const discountMultiplier = promoApplied && promoSavings > 0 ? 0.6 : 1;
 
       const res = await fetch("/api/create-checkout-session", {
         method: "POST",
@@ -148,7 +110,7 @@ function CartContent() {
           items: items.map((item) => ({
             planId: item.planId,
             planLabel: item.planLabel,
-            price: item.price,
+            price: Math.round(item.price * discountMultiplier),
             destination: item.destination,
             dates: item.dates,
             criteria: item.criteria,
@@ -171,7 +133,7 @@ function CartContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F4EF]" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+    <div className="min-h-screen bg-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
       <header className="sticky top-0 z-20 border-b border-[#1B2B4B]/10 bg-white/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <Link
@@ -187,7 +149,7 @@ function CartContent() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 py-10">
+      <main className="mx-auto max-w-5xl px-4 sm:px-6 py-6 sm:py-10">
         <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#c9a84c]">Panier</p>
@@ -277,22 +239,46 @@ function CartContent() {
               <div className="mt-5">
                 <label className="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#1B2B4B]/45">Code promo</label>
                 <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={promoCode}
-                    onChange={(event) => {
-                      setPromoCode(event.target.value);
-                      setPromoMessage("");
-                      setPromoProfileUrl(null);
-                      setPromoApplied(false);
-                      setPromoSavings(0);
-                    }}
-                    onKeyDown={(event) => event.key === "Enter" && handlePromo()}
-                    placeholder="ex. AMI10"
-                    className="min-w-0 flex-1 rounded-xl border border-[#1B2B4B]/15 bg-[#F8F4EF] px-3 py-2.5 text-sm font-mono focus:border-[#c9a84c] focus:outline-none"
-                  />
-                  <button type="button" onClick={handlePromo} className="rounded-xl bg-[#1B2B4B] px-4 text-sm font-bold text-white hover:bg-[#12213d]">
-                    OK
+                  <div className="relative min-w-0 flex-1">
+                    <input
+                      type="text"
+                      value={promoCode}
+                      onChange={(event) => {
+                        setPromoCode(event.target.value);
+                        setPromoMessage("");
+                        setPromoProfileUrl(null);
+                        setPromoApplied(false);
+                        setPromoSavings(0);
+                        setPromoState("idle");
+                      }}
+                      onKeyDown={(event) => event.key === "Enter" && handlePromo()}
+                      placeholder="ex. WELCOME"
+                      className={`w-full rounded-xl border px-3 py-2.5 pr-9 text-sm font-mono focus:outline-none transition-colors ${
+                        promoState === "valid"
+                          ? "promo-input-valid bg-emerald-50"
+                          : promoState === "invalid"
+                          ? "promo-input-invalid bg-red-50"
+                          : "border-[#1B2B4B]/15 bg-[#F8F4EF] focus:border-[#c9a84c]"
+                      }`}
+                    />
+                    {/* Icône état */}
+                    {promoState === "valid" && (
+                      <span className="promo-checkmark absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500 font-bold text-base">✓</span>
+                    )}
+                    {promoState === "invalid" && (
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 font-bold text-base">✕</span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handlePromo}
+                    className={`rounded-xl px-4 text-sm font-bold text-white transition-all ${
+                      promoState === "valid"
+                        ? "bg-emerald-600 hover:bg-emerald-700"
+                        : "bg-[#425C47] hover:bg-[#2e4133]"
+                    }`}
+                  >
+                    {promoState === "valid" ? "✓" : "OK"}
                   </button>
                 </div>
                 {promoMessage && (

@@ -18,7 +18,7 @@ type AdminUser = {
   created_at: string;
   orders_count: number;
   is_suspended: boolean;
-  explore3_used: boolean;
+  welcome_used: boolean;
   orders: UserOrder[];
 };
 
@@ -86,8 +86,8 @@ function UserPanel({ user, onClose }: { user: AdminUser; onClose: () => void }) 
               <p className="mt-1 text-sm text-white">{user.orders_count}</p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-[#0f172a] p-4">
-              <p className="text-xs uppercase tracking-wide text-slate-500">Code EXPLORE3</p>
-              <p className="mt-1 text-sm text-white">{user.explore3_used ? "Oui" : "Non"}</p>
+              <p className="text-xs uppercase tracking-wide text-slate-500">Code WELCOME</p>
+              <p className="mt-1 text-sm text-white">{user.welcome_used ? "Oui" : "Non"}</p>
             </div>
           </div>
 

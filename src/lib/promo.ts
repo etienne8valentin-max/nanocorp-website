@@ -6,25 +6,29 @@ export const PROMO_REQUIRES_LOGIN_MESSAGE = "Connectez-vous pour utiliser ce cod
 export const PROMO_REQUIRES_VERIFIED_PHONE_MESSAGE = "Pour utiliser ce code, veuillez d'abord vérifier votre numéro de téléphone dans votre profil.";
 export const PROMO_ALREADY_USED_MESSAGE = "Ce code a déjà été utilisé sur votre compte.";
 
-export const VALID_PROMO_CODES = {
-  EXPLORE3:   { planKey: "3j", discount: 100 },
-  DECOUVERTE: { planKey: "3j", discount: 100 },
-} as const;
+type PromoConfig = {
+  planKey: string | null; // null = valable pour tous les plans
+  discount: number;       // pourcentage (0-100)
+};
+
+export const VALID_PROMO_CODES: Record<string, PromoConfig> = {
+  WELCOME: { planKey: null, discount: 40 },
+};
 
 export type ValidPromoCode = keyof typeof VALID_PROMO_CODES;
 export type PromoValidationResult =
-  | { valid: true; code: ValidPromoCode; discount: number; isFree: true }
+  | { valid: true; code: string; discount: number; isFree: boolean }
   | { valid: false; error: string; message: string; profileUrl?: string; status?: number };
 
 export function normalizePromoCode(code: unknown): string {
   return typeof code === "string" ? code.toUpperCase().trim() : "";
 }
 
-export function getPromoConfig(code: string) {
-  return VALID_PROMO_CODES[code as ValidPromoCode];
+export function getPromoConfig(code: string): PromoConfig | undefined {
+  return VALID_PROMO_CODES[code];
 }
 
-export function isManagedPromoCode(code: string): code is ValidPromoCode {
+export function isManagedPromoCode(code: string): boolean {
   return code in VALID_PROMO_CODES;
 }
 
@@ -44,11 +48,12 @@ export async function validateManagedPromoForUser(params: {
     return { valid: false, error: "invalid_code", message: "Code promo invalide ou expiré." };
   }
 
-  if (promoConfig.planKey !== params.planKey) {
+  // Vérification plan (null = tous les plans acceptés)
+  if (promoConfig.planKey !== null && promoConfig.planKey !== params.planKey) {
     return {
       valid: false,
       error: "wrong_plan",
-      message: "Ce code promo est valable uniquement pour le Guide 3 jours.",
+      message: `Ce code promo n'est pas valable pour ce plan.`,
     };
   }
 
@@ -78,7 +83,7 @@ export async function validateManagedPromoForUser(params: {
     return { valid: false, error: "already_used", message: PROMO_ALREADY_USED_MESSAGE, status: 403 };
   }
 
-  return { valid: true, code: code as ValidPromoCode, discount: promoConfig.discount, isFree: true };
+  return { valid: true, code, discount: promoConfig.discount, isFree: promoConfig.discount === 100 };
 }
 
 export async function recordPromoUsage(params: {

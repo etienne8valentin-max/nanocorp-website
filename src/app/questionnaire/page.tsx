@@ -19,11 +19,74 @@ type PlanKey = (typeof PLAN_ORDER)[number];
 type Lang = "fr" | "en";
 
 const PLANS: Record<PlanKey, { name: string; duration: string; oldPrice: string; price: string; priceN: number }> = {
-  "3j":    { name: "Guide Express",  duration: "3 jours",  oldPrice: "9€",  price: "3€",  priceN: 3  },
-  "7j":    { name: "Guide Complet",  duration: "7 jours",  oldPrice: "19€", price: "7€",  priceN: 7  },
-  "14j":   { name: "Guide Immersif", duration: "14 jours", oldPrice: "29€", price: "12€", priceN: 12 },
-  "1mois": { name: "Guide de Vie",   duration: "1 mois",   oldPrice: "49€", price: "20€", priceN: 20 },
+  "3j":    { name: "Guide Express",  duration: "3 jours",  oldPrice: "5€",  price: "3€",  priceN: 3  },
+  "7j":    { name: "Guide Complet",  duration: "7 jours",  oldPrice: "10€", price: "7€",  priceN: 7  },
+  "14j":   { name: "Guide Immersif", duration: "14 jours", oldPrice: "18€", price: "12€", priceN: 12 },
+  "1mois": { name: "Guide de Vie",   duration: "1 mois",   oldPrice: "30€", price: "20€", priceN: 20 },
 };
+
+const DESTINATIONS = [
+  // France
+  "Paris","Nice","Lyon","Marseille","Bordeaux","Toulouse","Strasbourg","Lille","Nantes","Montpellier","Rennes","Monaco","Cannes","Saint-Tropez","Annecy","Grenoble","Avignon","Aix-en-Provence","Carcassonne","Biarritz","Colmar","Tours","La Rochelle","Brest","Dijon","Metz","Nancy","Reims","Ajaccio","Bonifacio","Calvi","Toulon","Perpignan","Clermont-Ferrand","Limoges",
+  // UK & Irlande
+  "Londres","Édimbourg","Glasgow","Manchester","Liverpool","Bristol","Bath","Oxford","Cambridge","York","Brighton","Cardiff","Dublin","Belfast","Cork",
+  // Italie
+  "Rome","Milan","Florence","Venise","Naples","Turin","Bologne","Palerme","Vérone","Gênes","Capri","Amalfi","Positano","Sorrento","Cinque Terre","Portofino","Lac de Côme","Lac de Garde","Toscane","Sicile","Sardaigne","San Marin",
+  // Espagne
+  "Barcelone","Madrid","Séville","Valence","Bilbao","Saint-Sébastien","Grenade","Cordoue","Tolède","Salamanque","Saint-Jacques-de-Compostelle","Palma de Majorque","Ibiza","Formentera","Ténérife","Grande Canarie","Lanzarote","Fuerteventura","La Palma","Minorque","Malaga","Marbella","Cadix","Alicante","Murcie","Saragosse","Valladolid",
+  // Portugal
+  "Lisbonne","Porto","Algarve","Sintra","Madère","Açores","Faro","Évora","Braga","Coimbra",
+  // Benelux
+  "Amsterdam","Rotterdam","La Haye","Utrecht","Bruges","Bruxelles","Gand","Anvers","Luxembourg",
+  // Allemagne
+  "Berlin","Munich","Hambourg","Francfort","Cologne","Stuttgart","Dresde","Leipzig","Düsseldorf","Heidelberg","Rothenburg","Forêt-Noire","Vallée du Rhin","Nuremberg","Brême","Hanovre",
+  // Autriche & Suisse
+  "Vienne","Salzbourg","Innsbruck","Hallstatt","Graz","Zurich","Genève","Berne","Lucerne","Interlaken","Zermatt","Saint-Moritz","Lausanne","Bâle","Lugano",
+  // Europe centrale
+  "Prague","Brno","Český Krumlov","Karlovy Vary","Budapest","Eger","Varsovie","Cracovie","Gdansk","Wroclaw","Tallinn","Riga","Vilnius","Helsinki","Turku","Stockholm","Göteborg","Malmö","Oslo","Bergen","Tromsø","Lofoten","Stavanger","Flåm","Copenhague","Aarhus","Reykjavik",
+  // Grèce & Balkans
+  "Athènes","Thessalonique","Rhodes","Santorin","Mykonos","Corfou","Crète","Zakynthos","Météores","Delphes","Dubrovnik","Split","Hvar","Zadar","Pula","Zagreb","Kotor","Monténégro","Ljubljana","Lac de Bled","Bratislava","Bucarest","Transylvanie","Brasov","Sibiu","Cluj-Napoca","Sofia","Plovdiv","Belgrade","Novi Sad",
+  // Turquie
+  "Istanbul","Cappadoce","Antalya","Bodrum","Izmir","Éphèse","Pamukkale","Trabzon","Ölüdeniz","Alanya","Kaş","Göreme","Fethiye","Marmaris",
+  // Israël & Moyen-Orient
+  "Jérusalem","Tel Aviv","Mer Morte","Petra","Wadi Rum","Amman","Beyrouth","Aqaba","Dubaï","Abu Dhabi","Muscat","Doha","Bahreïn","Riyad","Koweït","Tbilissi","Batoumi","Erevan","Bakou",
+  // Asie centrale
+  "Almaty","Samarkand","Boukhara","Tachkent","Khiva","Oulan-Bator",
+  // Japon
+  "Tokyo","Kyoto","Osaka","Hiroshima","Nara","Hakone","Nikko","Sapporo","Fukuoka","Okinawa","Kanazawa","Nagasaki","Kobé","Nagoya","Sendai","Matsuyama",
+  // Corée
+  "Séoul","Busan","Île de Jeju","Gyeongju","Incheon",
+  // Chine
+  "Pékin","Shanghai","Hong Kong","Macao","Guangzhou","Shenzhen","Chengdu","Xi'an","Hangzhou","Suzhou","Guilin","Zhangjiajie","Lijiang","Dali","Kunming","Chongqing","Nankin","Harbin","Wuhan",
+  // Taïwan & Asie Est
+  "Taipei","Tainan","Taichung","Jiufen","Gorges de Taroko",
+  // Thaïlande
+  "Bangkok","Chiang Mai","Chiang Rai","Phuket","Koh Samui","Koh Phi Phi","Krabi","Kanchanaburi","Ayutthaya","Pai","Sukhothaï","Koh Lanta","Koh Chang","Pattaya","Koh Tao",
+  // Indonésie
+  "Bali","Jakarta","Yogyakarta","Lombok","Île de Komodo","Raja Ampat","Flores","Volcan Bromo","Borobudur","Ubud","Seminyak","Nusa Penida","Gili Air",
+  // Malaisie & Singapour
+  "Singapour","Kuala Lumpur","Penang","Langkawi","Malacca","Bornéo","Kota Kinabalu","Kuching",
+  // Vietnam
+  "Hô Chi Minh-Ville","Hanoï","Hoi An","Baie d'Ha Long","Da Nang","Hué","Sapa","Ninh Binh","Phong Nha","Mui Ne","Phu Quoc","Nha Trang",
+  // Cambodge, Laos, Myanmar
+  "Phnom Penh","Siem Reap","Angkor Wat","Luang Prabang","Vientiane","Vang Vieng","Yangon","Bagan","Lac Inle","Mandalay","Ngapali",
+  // Inde
+  "Mumbai","Delhi","Agra","Jaipur","Goa","Kerala","Varanasi","Kolkata","Chennai","Bangalore","Hyderabad","Udaipur","Jodhpur","Rishikesh","Ladakh","Darjeeling","Îles Andaman","Munnar","Pondichéry","Hampi","Mysore","Amritsar","Shimla","Manali","Pushkar","Jaisalmer","Alleppey",
+  // Autres Asie du Sud
+  "Maldives","Sri Lanka","Colombo","Sigiriya","Kandy","Galle","Ella","Mirissa","Népal","Katmandou","Pokhara","Chitwan","Bhoutan","Thimphou","Paro",
+  // Amériques du Nord
+  "New York","Los Angeles","Miami","San Francisco","Chicago","Las Vegas","Boston","Washington DC","La Nouvelle-Orléans","Nashville","Austin","Seattle","Portland","Denver","Phoenix","San Diego","Houston","Atlanta","Orlando","Honolulu","Maui","Big Island Hawaï","Napa Valley","Parc Yellowstone","Grand Canyon","Yosemite","Parc de Zion","Bryce Canyon","Glacier National Park","Montréal","Toronto","Vancouver","Québec","Ottawa","Calgary","Whistler","Victoria","Chutes du Niagara","Halifax",
+  // Mexique & Amérique centrale
+  "Mexico","Cancun","Playa del Carmen","Tulum","Oaxaca","Guadalajara","Puerto Vallarta","Los Cabos","Mérida","Chichen Itza","Guanajuato","Puebla","Holbox","Bacalar","Cozumel","La Havane","Trinidad Cuba","Punta Cana","Jamaïque","Barbade","Sainte-Lucie","Martinique","Guadeloupe","Aruba","Curaçao","Costa Rica","Arenal","Manuel Antonio","Monteverde","Panama City","Bocas del Toro","Guatemala","Antigua Guatemala","Tikal","Belize",
+  // Amérique du Sud
+  "Bogotá","Carthagène des Indes","Medellín","Santa Marta","Parc Tayrona","Lima","Cusco","Machu Picchu","Lac Titicaca","Arequipa","Lignes de Nazca","Vallée Sacrée","Montagne Arc-en-Ciel","La Paz","Sucre","Salar d'Uyuni","Potosí","Quito","Îles Galápagos","Cuenca","Amazonie","Rio de Janeiro","São Paulo","Salvador de Bahia","Manaus","Florianópolis","Chutes d'Iguazú","Fernando de Noronha","Buenos Aires","Patagonie","Mendoza","Bariloche","El Calafate","Ushuaia","Salta","Jujuy","Santiago du Chili","Valparaíso","Torres del Paine","Île de Pâques","Désert d'Atacama","Puerto Natales","Montevideo","Punta del Este","Colonia del Sacramento",
+  // Afrique du Nord
+  "Marrakech","Fès","Casablanca","Chefchaouen","Désert du Sahara","Essaouira","Meknès","Ouarzazate","Agadir","Tanger","Djerba","Tunis","Hammamet","Tozeur","Le Caire","Louxor","Assouan","Alexandrie","Mer Rouge","Hurghada","Charm el-Cheikh","Dahab","Sinaï","Abou Simbel","Oasis de Siwa",
+  // Afrique subsaharienne
+  "Nairobi","Masai Mara","Amboseli","Tsavo","Lamu","Zanzibar","Serengeti","Kilimandjaro","Ngorongoro","Stone Town","Le Cap","Johannesburg","Safari Kruger","Garden Route","Drakensberg","Stellenbosch","Namibie","Sossusvlei","Etosha","Swakopmund","Botswana","Delta de l'Okavango","Chobe","Victoria Falls","Zambèze","Mozambique","Bazaruto","Madagascar","Avenue des Baobabs","Nosy Be","Ile Maurice","La Réunion","Seychelles","Mahé","Praslin","La Digue","Addis-Abeba","Lalibela","Montagnes du Simien","Kampala","Bwindi","Kigali","Parc des Volcans","Accra","Dakar","Saint-Louis Sénégal",
+  // Océanie
+  "Sydney","Melbourne","Brisbane","Perth","Adélaïde","Cairns","Gold Coast","Uluru","Grande Barrière de Corail","Auckland","Wellington","Queenstown","Milford Sound","Rotorua","Christchurch","Fiordland","Fidji","Tahiti","Bora-Bora","Moorea","Nouvelle-Calédonie","Vanuatu","Samoa","Tonga","Îles Cook",
+];
 
 const PLAN_DATE_LIMITS: Record<PlanKey, { maxDays: number; label: string }> = {
   "3j": { maxDays: 3, label: "3 jours" },
@@ -55,7 +118,7 @@ const LEGAL_COPY: Record<Lang, {
   fr: {
     noticeTitle: "Information importante",
     noticeBody:
-      "Les horaires et jours d'ouverture des monuments et lieux recommandés dans votre guide sont fournis à titre indicatif, sur la base des informations disponibles au moment de la génération. Spiregg ne peut être tenu responsable en cas de fermeture exceptionnelle, de modification d'horaires ou d'événements imprévus affectant l'accès aux lieux mentionnés. Nous vous recommandons de vérifier les informations officielles avant chaque visite.",
+      "Les horaires et jours d'ouverture des monuments et lieux recommandés dans votre guide sont fournis à titre indicatif, sur la base des informations disponibles au moment de la génération. TravelGuide AI ne peut être tenu responsable en cas de fermeture exceptionnelle, de modification d'horaires ou d'événements imprévus affectant l'accès aux lieux mentionnés. Nous vous recommandons de vérifier les informations officielles avant chaque visite.",
     termsPrefix: "J'ai lu et j'accepte les",
     termsLabel: "Conditions Générales de Vente",
     termsJoin: "ainsi que la",
@@ -124,7 +187,6 @@ const TRANSPORT: Opt[] = [
   { id: "walking", emoji: "🚶", label: "À pied / vélo" },
   { id: "rental",  emoji: "🚗", label: "Voiture de location" },
   { id: "taxi",    emoji: "🚕", label: "Taxi / Uber" },
-  { id: "private", emoji: "🚐", label: "Transferts privés" },
 ];
 
 const INTERESTS: Opt[] = [
@@ -179,12 +241,9 @@ const SOCIABILITY: Opt[] = [
 ];
 
 const VIBE: Opt[] = [
-  { id: "backpackers", emoji: "🎒",       label: "Voyageurs sac à dos" },
-  { id: "families",    emoji: "👨‍👩‍👧", label: "Familles" },
-  { id: "business",    emoji: "👔",       label: "Professionnels" },
-  { id: "luxury",      emoji: "💎",       label: "Haut de gamme & discret" },
-  { id: "local",       emoji: "🌍",       label: "Locaux & authentique" },
-  { id: "party",       emoji: "🎉",       label: "Fêtards" },
+  { id: "party",    emoji: "🎉", label: "Fêtards" },
+  { id: "local",    emoji: "🌍", label: "Locaux & authentique" },
+  { id: "business", emoji: "👔", label: "Professionnels" },
 ];
 
 const COMFORT: Opt[] = [
@@ -220,7 +279,6 @@ const AUTHENTICITY: Opt[] = [
 ];
 
 const DIET: Opt[] = [
-  { id: "carnivore",    emoji: "🥩", label: "Carnivore" },
   { id: "vegetarian",   emoji: "🌿", label: "Végétarien" },
   { id: "vegan",        emoji: "🌱", label: "Végan" },
   { id: "pescatarian",  emoji: "🐟", label: "Pescatarien" },
@@ -228,6 +286,8 @@ const DIET: Opt[] = [
   { id: "lactose_free", emoji: "🥛", label: "Sans lactose" },
   { id: "halal",        emoji: "🔵", label: "Halal" },
   { id: "kosher",       emoji: "✡️", label: "Casher" },
+  { id: "diabetes",     emoji: "🩺", label: "Diabète / maladie causant des troubles alimentaires" },
+  { id: "allergies",    emoji: "⚠️", label: "Allergies alimentaires" },
   { id: "none",         emoji: "✅", label: "Aucune restriction" },
 ];
 
@@ -244,6 +304,8 @@ const INSTAGRAM: Opt[] = [
 interface Answers {
   travel_speed: string;
   traveler_type: string;
+  traveler_adults: number;
+  traveler_children: number;
   activity_pace: string;
   budget: string;
   accommodations: string[];
@@ -264,6 +326,8 @@ interface Answers {
   eco_tourism: string;
   authenticity: string;
   diet: string[];
+  allergy_details: string;
+  budget_amount: string;
   instagram: string;
   user_email: string;
   notes: string;
@@ -271,14 +335,14 @@ interface Answers {
 }
 
 const EMPTY: Answers = {
-  travel_speed: "", traveler_type: "", activity_pace: "",
+  travel_speed: "", traveler_type: "", traveler_adults: 1, traveler_children: 0, activity_pace: "",
   budget: "", accommodations: [], transport: [],
   interests: [], sports: [],
   destination: "", arrival_date: "", departure_date: "", travel_dates: "", landscape: [], climate: "",
   sociability: "", vibe: [],
   comfort_level: "", connectivity: "", accessibility: [],
   eco_tourism: "", authenticity: "",
-  diet: [], instagram: "", user_email: "", notes: "", language: "fr",
+  diet: [], allergy_details: "", budget_amount: "", instagram: "", user_email: "", notes: "", language: "fr",
 };
 
 /* ──────────────────────────────────────────────────────────
@@ -319,6 +383,38 @@ function SectionCard({ icon, title, children }: { icon: string; title: string; c
         {title}
       </h3>
       {children}
+    </div>
+  );
+}
+
+function Stepper({
+  value, min, max, onChange, label, sublabel,
+}: {
+  value: number; min: number; max: number;
+  onChange: (v: number) => void;
+  label: string; sublabel?: string;
+}) {
+  return (
+    <div className="flex items-center justify-between rounded-xl border border-[#e2e8f0] bg-white px-4 py-3">
+      <div>
+        <p className="text-sm font-semibold text-[#334155]">{label}</p>
+        {sublabel && <p className="text-xs text-[#94a3b8] mt-0.5">{sublabel}</p>}
+      </div>
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => onChange(Math.max(min, value - 1))}
+          disabled={value <= min}
+          className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-[#e2e8f0] text-lg font-bold text-[#425B48] transition hover:border-[#c9a84c] hover:text-[#c9a84c] disabled:opacity-30 disabled:cursor-not-allowed"
+        >−</button>
+        <span className="w-6 text-center text-lg font-black text-[#425B48]">{value}</span>
+        <button
+          type="button"
+          onClick={() => onChange(Math.min(max, value + 1))}
+          disabled={value >= max}
+          className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-[#e2e8f0] text-lg font-bold text-[#425B48] transition hover:border-[#c9a84c] hover:text-[#c9a84c] disabled:opacity-30 disabled:cursor-not-allowed"
+        >+</button>
+      </div>
     </div>
   );
 }
@@ -510,7 +606,14 @@ function TravelDateCalendar({
 
       <div className="mt-2 grid grid-cols-7 gap-1.5">
         {monthCells.map(({ key, date, inCurrentMonth, isWeekend }) => {
-          const disabled = !inCurrentMonth || compareDateKeys(key, todayKey) < 0 || compareDateKeys(key, LAST_SELECTABLE_DATE) > 0;
+          // Cases des mois adjacents → case vide invisible
+          if (!inCurrentMonth) {
+            return <div key={key} className="aspect-square" />;
+          }
+
+          const isPast = compareDateKeys(key, todayKey) < 0;
+          const isTooFar = compareDateKeys(key, LAST_SELECTABLE_DATE) > 0;
+          const disabled = isPast || isTooFar;
           const isStart = key === startDate;
           const isEnd = key === endDate && endDate !== startDate;
           const isSingle = key === startDate && key === endDate;
@@ -525,7 +628,7 @@ function TravelDateCalendar({
               className={[
                 "relative aspect-square rounded-2xl text-sm font-bold transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2",
                 disabled
-                  ? "cursor-not-allowed bg-[#f1f5f9] text-[#cbd5e1] opacity-70"
+                  ? "cursor-not-allowed bg-[#f1f5f9] text-[#cbd5e1] opacity-50"
                   : inRange
                   ? "bg-[#425B48] text-white shadow-[0_10px_22px_rgba(66,91,72,0.22)] hover:scale-105"
                   : isWeekend
@@ -731,6 +834,13 @@ function QuestionnaireContent() {
 
   /* ── NAVIGATION ── */
 
+  function scrollToError(fieldId: string) {
+    setTimeout(() => {
+      const el = document.getElementById(fieldId);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 50);
+  }
+
   function goNext() {
     if (step === 1) {
       const nextErrors: { destination?: string; dates?: string } = {};
@@ -738,6 +848,8 @@ function QuestionnaireContent() {
       if (!answers.arrival_date) nextErrors.dates = "Veuillez sélectionner au moins une date de voyage.";
       if (Object.keys(nextErrors).length > 0) {
         setErrors(nextErrors);
+        if (nextErrors.destination) scrollToError("field-destination");
+        else if (nextErrors.dates) scrollToError("field-dates");
         return;
       }
       setErrors({});
@@ -775,16 +887,19 @@ function QuestionnaireContent() {
     }
     if (!answers.user_email.trim() || !answers.user_email.includes("@")) {
       setErrors({ email: "Veuillez entrer une adresse courriel valide." });
+      scrollToError("field-email");
       return;
     }
     if (!answers.destination.trim()) {
       setErrors({ destination: "Veuillez indiquer votre destination." });
       setStep(1);
+      setTimeout(() => scrollToError("field-destination"), 100);
       return;
     }
     if (!answers.arrival_date) {
       setErrors({ dates: "Veuillez sélectionner au moins une date de voyage." });
       setStep(1);
+      setTimeout(() => scrollToError("field-dates"), 100);
       return;
     }
     setErrors({});
@@ -942,20 +1057,27 @@ function QuestionnaireContent() {
             </div>
 
             {/* Destination */}
+            <div id="field-destination">
             <SectionCard icon="📍" title="Destination">
               <QLabel required>Où souhaitez-vous aller ?</QLabel>
               <input
                 type="text"
+                list="destinations-list"
                 value={answers.destination}
                 onChange={e => {
                   setAnswers(prev => ({ ...prev, destination: e.target.value }));
                   if (errors.destination) setErrors({});
                 }}
                 placeholder="Ville, pays ou région… p. ex. Tokyo, Japon"
-                className="w-full border-2 border-[#e2e8f0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a84c] bg-white transition-colors"
+                className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none bg-white transition-colors ${errors.destination ? "border-red-400" : "border-[#e2e8f0] focus:border-[#c9a84c]"}`}
               />
-              {errors.destination && <p className="text-xs text-red-500 mt-2">{errors.destination}</p>}
+              <datalist id="destinations-list">
+                {DESTINATIONS.map(d => <option key={d} value={d} />)}
+              </datalist>
+              <p className="text-xs text-[#94a3b8] mt-1.5">💡 Suggestions disponibles — vérifiez l&apos;orthographe avant de continuer.</p>
+              {errors.destination && <p className="text-xs text-red-500 mt-1 font-semibold">{errors.destination}</p>}
 
+              <div id="field-dates">
               <TravelDateCalendar
                 planKey={selectedPlanKey}
                 startDate={answers.arrival_date}
@@ -963,7 +1085,9 @@ function QuestionnaireContent() {
                 onChange={updateTravelDates}
               />
               {errors.dates && <p className="text-xs font-semibold text-red-500 mt-2">{errors.dates}</p>}
+              </div>
             </SectionCard>
+            </div>
 
             {/* Rythme & Style */}
             <SectionCard icon="🏃" title="Rythme & manière de voyager">
@@ -984,6 +1108,33 @@ function QuestionnaireContent() {
                       <Pill key={o.id} emoji={o.emoji} label={o.label} selected={answers.traveler_type === o.id} onClick={() => radio("traveler_type", o.id)} />
                     ))}
                   </div>
+                </div>
+
+                <div>
+                  <QLabel>Combien de voyageurs ?</QLabel>
+                  <div className="space-y-2">
+                    <Stepper
+                      label="🧑 Adultes"
+                      sublabel="18 ans et plus"
+                      value={answers.traveler_adults}
+                      min={1}
+                      max={20}
+                      onChange={v => setAnswers(prev => ({ ...prev, traveler_adults: v }))}
+                    />
+                    <Stepper
+                      label="👶 Enfants"
+                      sublabel="Moins de 18 ans"
+                      value={answers.traveler_children}
+                      min={0}
+                      max={10}
+                      onChange={v => setAnswers(prev => ({ ...prev, traveler_children: v }))}
+                    />
+                  </div>
+                  {answers.traveler_children > 0 && (
+                    <p className="mt-2 rounded-xl border border-[#c9a84c]/30 bg-[#fffbf0] px-3 py-2 text-xs text-[#9a7629]">
+                      💡 Mentionnez les âges des enfants dans les notes libres si besoin d&apos;activités adaptées.
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -1019,10 +1170,24 @@ function QuestionnaireContent() {
               <div className="space-y-5">
                 <div>
                   <QLabel>Enveloppe globale</QLabel>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {BUDGET_OPTS.map(o => (
                       <Pill key={o.id} emoji={o.emoji} label={o.label} selected={answers.budget === o.id} onClick={() => radio("budget", o.id)} />
                     ))}
+                  </div>
+                  <QLabel hint="(optionnel)">Budget total approximatif pour ce voyage</QLabel>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      min="0"
+                      max="1000000"
+                      value={answers.budget_amount}
+                      onChange={e => setAnswers(prev => ({ ...prev, budget_amount: e.target.value }))}
+                      placeholder="ex. 1500"
+                      className="w-36 border-2 border-[#e2e8f0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a84c] bg-white transition-colors"
+                    />
+                    <span className="text-sm font-semibold text-[#94a3b8]">€</span>
+                    <span className="text-xs text-[#94a3b8]">pour tout le voyage</span>
                   </div>
                 </div>
 
@@ -1198,12 +1363,24 @@ function QuestionnaireContent() {
             <SectionCard icon="✨" title="Informations pratiques">
               <div className="space-y-5">
                 <div>
-                  <QLabel hint="(optionnel, plusieurs choix)">Restrictions alimentaires</QLabel>
+                  <QLabel hint="(optionnel, plusieurs choix)">Restrictions & besoins alimentaires</QLabel>
                   <div className="flex flex-wrap gap-2">
                     {DIET.map(o => (
                       <Pill key={o.id} emoji={o.emoji} label={o.label} selected={answers.diet.includes(o.id)} onClick={() => toggle("diet", o.id)} />
                     ))}
                   </div>
+                  {answers.diet.includes("allergies") && (
+                    <div className="mt-3">
+                      <QLabel required>Précisez vos allergies alimentaires</QLabel>
+                      <input
+                        type="text"
+                        value={answers.allergy_details}
+                        onChange={e => setAnswers(prev => ({ ...prev, allergy_details: e.target.value }))}
+                        placeholder="ex. arachides, fruits de mer, gluten sévère, noix…"
+                        className="w-full border-2 border-[#e2e8f0] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a84c] bg-white transition-colors"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -1215,7 +1392,7 @@ function QuestionnaireContent() {
                   </div>
                 </div>
 
-                <div>
+                <div id="field-email">
                   <QLabel required>📧 Adresse de réception du guide</QLabel>
                   <input
                     type="email"
@@ -1280,7 +1457,12 @@ function QuestionnaireContent() {
                 {answers.traveler_type && (
                   <div className="flex items-start gap-2">
                     <span className="w-5 shrink-0">👤</span>
-                    <span>{labelFor(TRAVELER_TYPE, answers.traveler_type)}</span>
+                    <span>
+                      {labelFor(TRAVELER_TYPE, answers.traveler_type)}
+                      {" — "}
+                      {answers.traveler_adults} adulte{answers.traveler_adults > 1 ? "s" : ""}
+                      {answers.traveler_children > 0 && `, ${answers.traveler_children} enfant${answers.traveler_children > 1 ? "s" : ""}`}
+                    </span>
                   </div>
                 )}
                 {answers.budget && (

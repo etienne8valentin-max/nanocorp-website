@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -11,7 +11,7 @@ type SignupFormProps = {
 const inputStyle = {
   background: "#F8F5EF",
   border: "1.5px solid #E8E0D0",
-  color: "#1B2A4A",
+  color: "#425C47",
 };
 
 export default function SignupForm({ turnstileSiteKey }: SignupFormProps) {
@@ -75,7 +75,7 @@ export default function SignupForm({ turnstileSiteKey }: SignupFormProps) {
           <Link
             href="/"
             className="inline-block text-2xl font-bold"
-            style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1B2A4A" }}
+            style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}
           >
             ✈️ TravelGuide AI
           </Link>
@@ -84,7 +84,7 @@ export default function SignupForm({ turnstileSiteKey }: SignupFormProps) {
         <div className="rounded-2xl p-8 shadow-lg" style={{ background: "#fff", border: "1px solid #E8E0D0" }}>
           <h1
             className="text-2xl font-bold mb-1"
-            style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1B2A4A" }}
+            style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}
           >
             Créer un compte
           </h1>
@@ -94,7 +94,7 @@ export default function SignupForm({ turnstileSiteKey }: SignupFormProps) {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1" style={{ color: "#1B2A4A" }}>
+              <label className="block text-sm font-medium mb-1" style={{ color: "#425C47" }}>
                 Email
               </label>
               <input
@@ -111,7 +111,7 @@ export default function SignupForm({ turnstileSiteKey }: SignupFormProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1" style={{ color: "#1B2A4A" }}>
+              <label className="block text-sm font-medium mb-1" style={{ color: "#425C47" }}>
                 Téléphone
               </label>
               <input
@@ -134,7 +134,7 @@ export default function SignupForm({ turnstileSiteKey }: SignupFormProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1" style={{ color: "#1B2A4A" }}>
+              <label className="block text-sm font-medium mb-1" style={{ color: "#425C47" }}>
                 Mot de passe
               </label>
               <input
@@ -152,7 +152,7 @@ export default function SignupForm({ turnstileSiteKey }: SignupFormProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1" style={{ color: "#1B2A4A" }}>
+              <label className="block text-sm font-medium mb-1" style={{ color: "#425C47" }}>
                 Confirmer le mot de passe
               </label>
               <input
@@ -187,7 +187,7 @@ export default function SignupForm({ turnstileSiteKey }: SignupFormProps) {
               </div>
             ) : (
               <div className="rounded-xl border border-[#E8E0D0] bg-[#F8F5EF] p-4">
-                <label className="block text-sm font-medium mb-1" style={{ color: "#1B2A4A" }}>
+                <label className="block text-sm font-medium mb-1" style={{ color: "#425C47" }}>
                   Vérification anti-robot : combien font 3 + 4 ?
                 </label>
                 <input
@@ -218,7 +218,7 @@ export default function SignupForm({ turnstileSiteKey }: SignupFormProps) {
               type="submit"
               disabled={loading}
               className="w-full rounded-xl py-3 font-semibold text-sm transition-all"
-              style={{ background: loading ? "#8899bb" : "#1B2A4A", color: "#fff" }}
+              style={{ background: loading ? "#8899bb" : "#425C47", color: "#fff" }}
             >
               {loading ? "Création…" : "Créer mon compte"}
             </button>

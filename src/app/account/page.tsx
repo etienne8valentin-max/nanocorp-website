@@ -65,7 +65,7 @@ export default async function AccountPage() {
   return (
     <div className="min-h-screen" style={{ background: "#FDFAF5", fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
       {/* Navbar */}
-      <nav className="sticky top-0 z-10 px-6 py-4 flex items-center justify-between" style={{ background: "#1B2A4A" }}>
+      <nav className="sticky top-0 z-10 px-6 py-4 flex items-center justify-between" style={{ background: "#425C47" }}>
         <Link href="/" className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
           ✈️ TravelGuide AI
         </Link>
@@ -76,7 +76,7 @@ export default async function AccountPage() {
       </nav>
 
       <main className="max-w-3xl mx-auto px-4 py-10">
-        <h1 className="text-3xl font-bold mb-1" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1B2A4A" }}>
+        <h1 className="text-3xl font-bold mb-1" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}>
           Mon compte
         </h1>
         <p className="text-sm mb-8" style={{ color: "#7a7060" }}>
@@ -90,11 +90,11 @@ export default async function AccountPage() {
               <span className="text-2xl">🎁</span>
               <div>
                 <h2 className="font-bold text-base mb-1" style={{ color: "#92400e" }}>
-                  Vérification téléphone — Guide 3 jours offert
+                  Vérification téléphone — -40% sur votre premier guide
                 </h2>
                 <p className="text-sm" style={{ color: "#78350f" }}>
                   Vérifiez votre numéro par SMS pour débloquer le code promo{" "}
-                  <span className="font-mono font-bold">EXPLORE3</span> sur le Guide 3 jours.
+                  <span className="font-mono font-bold">WELCOME</span> (-40% sur n&apos;importe quel plan, utilisable une fois).
                 </p>
               </div>
             </div>
@@ -106,7 +106,7 @@ export default async function AccountPage() {
           </div>
         )}
 
-        <h2 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1B2A4A" }}>
+        <h2 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}>
           Mes commandes
         </h2>
         <p className="text-sm mb-6" style={{ color: "#7a7060" }}>
@@ -116,7 +116,7 @@ export default async function AccountPage() {
         {orders.length === 0 ? (
           <div className="rounded-2xl p-12 text-center" style={{ background: "#fff", border: "1px solid #E8E0D0" }}>
             <div className="text-5xl mb-4">🗺️</div>
-            <h2 className="text-xl font-bold mb-2" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1B2A4A" }}>
+            <h2 className="text-xl font-bold mb-2" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}>
               Aucune commande pour l&apos;instant
             </h2>
             <p className="text-sm mb-6" style={{ color: "#7a7060" }}>
@@ -143,7 +143,7 @@ export default async function AccountPage() {
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className="text-base font-semibold truncate" style={{ color: "#1B2A4A" }}>
+                      <span className="text-base font-semibold truncate" style={{ color: "#425C47" }}>
                         {order.destination ?? "Destination non définie"}
                       </span>
                       <span
@@ -165,7 +165,7 @@ export default async function AccountPage() {
                   <Link
                     href={`/account/orders/${order.id}`}
                     className="shrink-0 rounded-xl px-4 py-2 text-sm font-semibold transition-all"
-                    style={{ background: "#1B2A4A", color: "#fff" }}
+                    style={{ background: "#425C47", color: "#fff" }}
                   >
                     Voir le suivi →
                   </Link>

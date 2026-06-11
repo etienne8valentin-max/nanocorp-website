@@ -16,7 +16,7 @@ async function getUsers() {
       `SELECT id, user_id, plan, destination, status, created_at FROM orders ORDER BY created_at DESC`
     ),
     pool.query(
-      `SELECT user_id, promo_code FROM promo_usages WHERE promo_code = 'EXPLORE3'`
+      `SELECT user_id, promo_code FROM promo_usages WHERE promo_code = 'WELCOME'`
     ),
   ]);
 
@@ -28,7 +28,7 @@ async function getUsers() {
     ordersByUser.set(order.user_id, existing);
   }
 
-  const explore3Users = new Set(promoRows.map((r) => r.user_id));
+  const welcomeUsers = new Set(promoRows.map((r) => r.user_id));
 
   return usersRows.map((user) => {
     const userOrders = ordersByUser.get(user.id) ?? [];
@@ -39,7 +39,7 @@ async function getUsers() {
       created_at: user.created_at ?? "",
       is_suspended: Boolean(user.is_suspended),
       orders_count: userOrders.length,
-      explore3_used: explore3Users.has(user.id),
+      welcome_used: welcomeUsers.has(user.id),
       orders: userOrders.map((order) => ({
         id: order.id,
         plan: order.plan,

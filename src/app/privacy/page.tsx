@@ -1,457 +1,370 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Link from "next/link";
 
-const content = {
-  fr: {
-    lang: "FR",
-    other: "EN",
-    title: "Politique de Confidentialité",
-    subtitle: "TravelGuide AI — Version du [DATE À COMPLÉTER]",
-    back: "← Retour au site",
-    note: "Document rédigé conformément au RGPD (Règlement UE 2016/679) et à la loi Informatique et Libertés. Ton accessible recommandé par la CNIL.",
-    sections: [
-      {
-        id: "art1",
-        title: "1. Identité du Responsable de Traitement",
-        body: `Le service TravelGuide AI est édité par :
+type Lang = "fr" | "en";
 
-- **Nom / Raison sociale :** [NOM PRÉNOM OU RAISON SOCIALE]
-- **Statut juridique :** Auto-entrepreneur
-- **SIRET :** [NUMÉRO SIRET]
-- **Adresse :** [ADRESSE COMPLÈTE], France
-- **Email de contact :** [EMAIL DE CONTACT]
-- **Site web :** https://spiregg.nanocorp.app
+const SECTIONS_FR = [
+  {
+    id: "qui",
+    title: "1. Qui sommes-nous ?",
+    body: `TravelGuide AI est un service de génération de guides de voyage personnalisés par intelligence artificielle, édité par NanoCorp.
 
-En tant qu'auto-entrepreneur, le responsable de traitement n'est pas soumis à l'obligation de désigner un Délégué à la Protection des Données (DPO). Pour toute question relative à la protection de vos données personnelles, vous pouvez écrire directement à [EMAIL DE CONTACT].`,
-      },
-      {
-        id: "art2",
-        title: "2. Données Collectées",
-        body: `TravelGuide AI collecte uniquement les données strictement nécessaires au fonctionnement du service :
+**Contact :** privacy@travelguide-ai.com
+**Site :** https://travelguide-ai.com
 
-**Identification**
-- Donnée : Adresse email
-- Justification : Création du compte, livraison du guide, communication
-
-**Authentification**
-- Donnée : Mot de passe (hashé et salé — jamais stocké en clair)
-- Justification : Sécurisation de l'accès au compte
-
-**Personnalisation du guide**
-- Données : Destination(s), dates de voyage, budget, style de voyage (culturel, aventure, détente…), contraintes (accessibilité, régimes alimentaires, préférences d'hébergement…)
-- Justification : Génération personnalisée du guide de voyage
-
-**Historique des commandes**
-- Données : Références de commande, montant, date
-- Justification : Suivi du service, facturation, obligations comptables légales
-
-**Données techniques**
-- Données : Adresse IP, pages visitées, durée de session (outil analytique)
-- Justification : Sécurité, amélioration du service, statistiques agrégées
-
-**Données NON collectées par TravelGuide AI :** numéro de carte bancaire, CVV, IBAN (traités exclusivement par Stripe — voir Art. 7). Aucune donnée sensible au sens de l'Art. 9 RGPD.`,
-      },
-      {
-        id: "art3",
-        title: "3. Base Légale des Traitements",
-        body: `Chaque traitement repose sur une base légale identifiée conformément à l'Art. 6 du RGPD :
-
-**Gestion du compte (email + mot de passe)**
-- Base légale : Exécution du contrat (Art. 6.1.b RGPD)
-- Détail : Nécessaire pour accéder au service commandé
-
-**Traitement des préférences de voyage**
-- Base légale : Exécution du contrat (Art. 6.1.b RGPD)
-- Détail : Nécessaire à la génération personnalisée du guide
-
-**Historique des commandes**
-- Base légale : Exécution du contrat + Obligation légale (Art. 6.1.b et 6.1.c RGPD)
-- Détail : Suivi des commandes et obligations comptables (7 ans)
-
-**Traitement du paiement**
-- Base légale : Exécution du contrat (Art. 6.1.b) — délégué à Stripe
-- Détail : Les données bancaires ne transitent pas par TravelGuide AI
-
-**Données de navigation / analytiques**
-- Base légale : Intérêt légitime (Art. 6.1.f RGPD)
-- Détail : Amélioration du service, sécurité — données agrégées et anonymisées`,
-      },
-      {
-        id: "art4",
-        title: "4. Finalités des Traitements",
-        body: `Vos données personnelles sont utilisées exclusivement pour les finalités suivantes :
-
-1. **Exécution du service :** création et gestion du compte client, réception du questionnaire, génération et livraison du guide de voyage.
-
-2. **Facturation et obligations légales :** émission des justificatifs de paiement, archivage comptable pendant 7 ans (obligation légale française).
-
-3. **Amélioration du service :** analyse agrégée et anonymisée de l'usage du site (pages visitées, taux de conversion). Ces données ne permettent pas d'identifier les utilisateurs individuellement.
-
-4. **Communication transactionnelle :** envoi de l'email de confirmation de commande et du guide. Aucun email marketing n'est envoyé sans consentement explicite de votre part.`,
-      },
-      {
-        id: "art5",
-        title: "5. Durée de Conservation",
-        body: `**Données de compte (email, mot de passe hashé)**
-Conservées jusqu'à suppression du compte par l'utilisateur, ou 3 ans après la dernière connexion (inactivité).
-
-**Préférences de voyage et guides générés**
-Même durée que les données de compte.
-
-**Données de facturation** (références commande, montant)
-**7 ans** à compter de la transaction — obligation légale (Art. L. 123-22 Code de commerce).
-
-**Données de navigation / analytiques**
-13 mois glissants maximum.
-
-**Logs de sécurité**
-12 mois.
-
-Passés ces délais, les données sont supprimées ou anonymisées de manière irréversible.`,
-      },
-      {
-        id: "art6",
-        title: "6. Vos Droits (RGPD Art. 15 à 22)",
-        body: `Conformément au RGPD, vous disposez des droits suivants sur vos données personnelles :
-
-**Droit d'accès (Art. 15)**
-Vous pouvez demander à accéder à toutes les données vous concernant que nous détenons, ainsi qu'à des informations sur leur traitement.
-
-**Droit de rectification (Art. 16)**
-Vous pouvez demander la correction de données inexactes ou incomplètes.
-
-**Droit à l'effacement — « Droit à l'oubli » (Art. 17)**
-Vous pouvez demander la suppression de vos données, sous réserve des obligations légales de conservation (données de facturation : 7 ans).
-
-**Droit à la portabilité (Art. 20)**
-Vous pouvez recevoir vos données dans un format structuré et lisible par machine, ou demander leur transfert à un autre prestataire.
-
-**Droit d'opposition (Art. 21)**
-Vous pouvez vous opposer au traitement fondé sur l'intérêt légitime (analytics), pour des motifs tenant à votre situation particulière.
-
-**Droit à la limitation (Art. 18)**
-Vous pouvez demander la suspension temporaire du traitement dans certaines situations prévues par le RGPD.
-
-**Comment exercer vos droits :**
-Adressez votre demande par email à **[EMAIL DE CONTACT]** en indiquant votre adresse email de compte et le droit que vous souhaitez exercer. Nous répondons dans un délai d'un mois. Une vérification d'identité pourra être demandée.
-
-**Réclamation auprès de la CNIL :**
-Si vous estimez que vos droits ne sont pas respectés, vous pouvez introduire une plainte auprès de la CNIL : https://www.cnil.fr/fr/plaintes`,
-      },
-      {
-        id: "art7",
-        title: "7. Sous-Traitants et Transferts de Données",
-        body: `TravelGuide AI fait appel aux sous-traitants suivants. Des contrats de traitement de données ont été conclus conformément à l'Art. 28 du RGPD.
-
-**Stripe — Traitement des paiements**
-- Données transmises : Montant, devise, référence de commande, email (pour le reçu de paiement uniquement)
-- À noter : Les données bancaires (numéro de carte, CVV) ne transitent jamais par nos serveurs
-- Garanties RGPD : Stripe est certifiée PCI-DSS niveau 1. Pour les transferts hors UE, Stripe utilise les Clauses Contractuelles Types (CCT) approuvées par la Commission européenne
-- Politique Stripe : https://stripe.com/fr/privacy
-
-**OpenAI — Génération de contenu IA**
-- Données transmises : Les préférences de voyage saisies dans le questionnaire (destination, dates, budget, style, contraintes)
-- À noter : Email, mot de passe et historique de commandes ne sont jamais transmis à OpenAI
-- Garanties RGPD : Option « Data Privacy » activée (vos données ne servent pas à entraîner les modèles). Transferts vers les États-Unis encadrés par les Clauses Contractuelles Types (CCT)
-- Politique OpenAI : https://openai.com/policies/privacy-policy
-
-**Google — Livraison des guides (Google Docs)**
-- Données transmises : Adresse email du client (partage du document), contenu du guide généré
-- À noter : Transferts vers les États-Unis encadrés par les CCT et le Data Privacy Framework UE–États-Unis
-- Politique Google : https://policies.google.com/privacy
-
-**Hébergeur — Infrastructure**
-- Prestataire : [Vercel / OVH / Scaleway — à préciser]
-- Données hébergées : Ensemble des données applicatives
-- Localisation : Infrastructure européenne (UE/EEE)
-- Garanties : Conformité RGPD contractuellement garantie`,
-      },
-      {
-        id: "art8",
-        title: "8. Cookies et Technologies de Suivi",
-        body: `TravelGuide AI utilise uniquement des cookies techniques et analytiques légers :
-
-**Cookie de session**
-- Finalité : Maintien de la connexion au compte
-- Durée : Durée de la session
-
-**Cookie d'authentification**
-- Finalité : Mémorisation de la session connectée
-- Durée : 30 jours (si « rester connecté »)
-
-**Analytics (PostHog — agrégé)**
-- Finalité : Statistiques d'usage agrégées, amélioration du service
-- Durée : 13 mois glissants
-
-**Cookies publicitaires :** Aucun. TravelGuide AI ne dépose aucun cookie à des fins de ciblage publicitaire ni de partage avec des tiers à des fins commerciales.
-
-Conformément à la délibération CNIL n° 2020-091, les cookies strictement nécessaires ne requièrent pas de consentement. Pour vous opposer aux cookies analytiques, contactez-nous à [EMAIL DE CONTACT].`,
-      },
-      {
-        id: "art9",
-        title: "9. Sécurité des Données",
-        body: `TravelGuide AI met en œuvre les mesures suivantes pour protéger vos données :
-
-- **HTTPS (TLS) :** Toutes les communications entre votre navigateur et nos serveurs sont chiffrées (TLS 1.2 minimum).
-- **Mots de passe hashés :** Les mots de passe ne sont jamais stockés en clair — ils sont hashés et salés (algorithme bcrypt).
-- **Aucune donnée bancaire stockée :** Le traitement des paiements est entièrement délégué à Stripe (PCI-DSS niveau 1).
-- **Accès restreint :** L'accès aux données personnelles est limité au responsable de traitement et aux sous-traitants listés à l'Art. 7, dans la limite stricte de leurs missions.
-- **Minimisation :** Nous ne collectons que les données strictement nécessaires au service.
-
-En cas de violation de données susceptible d'engendrer un risque élevé pour vos droits, nous nous engageons à vous en informer dans les meilleurs délais (Art. 34 RGPD).`,
-      },
-      {
-        id: "art10",
-        title: "10. Modifications de la Politique",
-        body: `Nous nous réservons le droit de modifier cette politique de confidentialité, notamment pour nous conformer à l'évolution de la réglementation. La date de dernière mise à jour est indiquée en haut du document.
-
-En cas de modification substantielle, vous serez informé(e) par email ou via une notification sur le Site.`,
-      },
-      {
-        id: "art11",
-        title: "11. Contact et Réclamation",
-        body: `**Pour exercer vos droits ou pour toute question :**
-Email : [EMAIL DE CONTACT]
-
-**Pour déposer une plainte auprès de l'autorité de contrôle :**
-Commission Nationale de l'Informatique et des Libertés (CNIL)
-3 Place de Fontenoy — TSA 80715 — 75334 PARIS CEDEX 07
-Téléphone : 01 53 73 22 22
-Site : https://www.cnil.fr
-Formulaire en ligne : https://www.cnil.fr/fr/plaintes`,
-      },
-    ],
+Pour toute question relative à vos données personnelles, écrivez-nous directement à l'adresse ci-dessus.`,
   },
-  en: {
-    lang: "EN",
-    other: "FR",
-    title: "Privacy Policy",
-    subtitle: "TravelGuide AI — Version [DATE]",
-    back: "← Back to site",
-    note: "This is a faithful English summary. In case of conflict, the French version prevails.",
-    sections: [
-      {
-        id: "s1",
-        title: "1. Data Controller",
-        body: `TravelGuide AI is operated by:
+  {
+    id: "collecte",
+    title: "2. Quelles données collectons-nous ?",
+    body: `Nous ne collectons que le strict nécessaire :
 
-- **Name / Company:** [FULL NAME OR COMPANY NAME]
-- **Status:** Sole trader (auto-entrepreneur)
-- **SIRET:** [SIRET NUMBER]
-- **Address:** [FULL ADDRESS], France
-- **Contact email:** [CONTACT EMAIL]
-- **Website:** https://spiregg.nanocorp.app
+**Données de compte :**
+- Adresse e-mail : pour créer votre compte, vous livrer votre guide et vous contacter sur votre commande uniquement.
+- Mot de passe : stocké sous forme chiffrée (hachage bcrypt). Nous n'y avons pas accès.
 
-For any data protection enquiry, contact [CONTACT EMAIL] directly.`,
-      },
-      {
-        id: "s2",
-        title: "2. Data Collected",
-        body: `We collect only the data strictly necessary to provide the service:
+**Numéro de téléphone :**
+- Collecté uniquement pour la vérification d'identité par SMS (code OTP via Twilio).
+- Non utilisé à des fins commerciales, non revendu, non partagé à des tiers non mentionnés.
 
-- **Email address:** account creation, guide delivery, communication
-- **Password (hashed & salted — never in plain text):** account security
-- **Travel preferences** (destination, dates, budget, travel style, constraints): personalised guide generation
-- **Order history** (references, amounts, dates): service tracking, billing, legal obligations
-- **Technical data** (IP address, navigation data via analytics): security, aggregated usage statistics
+**Données du questionnaire de voyage :**
+- Destination, dates, préférences de voyage, style de voyage, budget, intérêts.
+- Ces données sont **non sensibles** (aucune donnée de santé, aucune donnée financière précise, aucune opinion politique).
+- Elles sont transmises à Claude AI (Anthropic) uniquement pour générer votre guide personnalisé.
 
-**Not collected:** card numbers, CVV, IBAN — handled exclusively by Stripe.`,
-      },
-      {
-        id: "s3",
-        title: "3. Legal Basis",
-        body: `Each processing activity has an identified legal basis under Art. 6 GDPR:
+**Données de paiement :**
+- Gérées exclusivement par Stripe. Nous ne voyons ni ne stockons jamais votre numéro de carte bancaire.
 
-- **Account management:** Contract performance (Art. 6.1.b)
-- **Travel preferences:** Contract performance (Art. 6.1.b) — required to generate the guide
-- **Order history:** Contract + Legal obligation (Art. 6.1.b & 6.1.c)
-- **Payment processing:** Contract performance (Art. 6.1.b) — delegated to Stripe
-- **Analytics / navigation data:** Legitimate interest (Art. 6.1.f) — aggregated & anonymised`,
-      },
-      {
-        id: "s4",
-        title: "4. Purposes",
-        body: `Your data is used solely for:
-
-1. **Service delivery:** account management, questionnaire processing, guide generation and delivery.
-2. **Billing & legal compliance:** invoicing, 7-year accounting records.
-3. **Service improvement:** aggregated, anonymised usage analysis — no individual identification.
-4. **Transactional emails:** order confirmation and guide delivery only. No marketing emails without explicit consent.`,
-      },
-      {
-        id: "s5",
-        title: "5. Retention Periods",
-        body: `- **Account data (email, hashed password):** until account deletion or 3 years of inactivity
-- **Travel preferences & generated guides:** same as account data
-- **Billing data:** **7 years** (French legal accounting requirement)
-- **Analytics data:** rolling 13 months
-- **Security logs:** 12 months
-
-After these periods, data is deleted or irreversibly anonymised.`,
-      },
-      {
-        id: "s6",
-        title: "6. Your Rights (GDPR Art. 15–22)",
-        body: `You have the following rights regarding your personal data:
-
-- **Access (Art. 15):** obtain a copy of all data we hold about you.
-- **Rectification (Art. 16):** correct inaccurate or incomplete data.
-- **Erasure / Right to be forgotten (Art. 17):** request deletion (subject to 7-year billing retention obligation).
-- **Portability (Art. 20):** receive your data in a structured, machine-readable format.
-- **Objection (Art. 21):** object to processing based on legitimate interest (e.g. analytics).
-- **Restriction (Art. 18):** request temporary suspension of processing in specific circumstances.
-
-**To exercise your rights:** email **[CONTACT EMAIL]** stating your account email and the right you wish to exercise. We will respond within one month. Identity verification may be requested.
-
-**To file a complaint:** CNIL — https://www.cnil.fr/fr/plaintes`,
-      },
-      {
-        id: "s7",
-        title: "7. Sub-processors and Transfers",
-        body: `Data Processing Agreements have been signed with all sub-processors (Art. 28 GDPR):
-
-**Stripe — Payments**
-- Data shared: order amount, email (for receipt)
-- No card data ever reaches TravelGuide AI servers
-- Safeguards: PCI-DSS Level 1, Standard Contractual Clauses (SCCs) for non-EU transfers
-- Policy: https://stripe.com/fr/privacy
-
-**OpenAI — AI guide generation**
-- Data shared: travel preferences from the questionnaire only
-- Email, password, order history are never sent to OpenAI
-- Safeguards: Data Privacy option enabled (no training use), SCCs for US transfers
-- Policy: https://openai.com/policies/privacy-policy
-
-**Google — Guide delivery (Google Docs)**
-- Data shared: email address, guide content
-- Safeguards: EU–US Data Privacy Framework, SCCs
-- Policy: https://policies.google.com/privacy
-
-**Hosting provider (Vercel/OVH/Scaleway)**
-- EU-based infrastructure, GDPR-compliant contract`,
-      },
-      {
-        id: "s8",
-        title: "8. Cookies",
-        body: `Only technically necessary cookies and lightweight analytics (PostHog, aggregated) are used.
-
-**No advertising cookies. No data shared with third parties for commercial purposes.**
-
-Strictly necessary cookies do not require consent under CNIL guidelines. To object to analytics cookies, contact [CONTACT EMAIL].`,
-      },
-      {
-        id: "s9",
-        title: "9. Security",
-        body: `- **HTTPS (TLS):** all data in transit is encrypted (minimum TLS 1.2).
-- **Hashed passwords:** passwords are hashed and salted (bcrypt) — never stored in plain text.
-- **No payment card data stored:** entirely handled by Stripe (PCI-DSS Level 1).
-- **Restricted access:** data access is limited to the data controller and listed sub-processors.
-- **Data minimisation:** we only collect what is strictly necessary.
-
-In the event of a data breach likely to cause high risk, we will notify you without undue delay (Art. 34 GDPR).`,
-      },
-      {
-        id: "s10",
-        title: "10. Policy Updates",
-        body: `We may update this policy to reflect regulatory changes. The version date is shown at the top of the document.
-
-For material changes, you will be notified by email or via a site notification.`,
-      },
-      {
-        id: "s11",
-        title: "11. Contact",
-        body: `**For rights requests or any privacy question:**
-Email: [CONTACT EMAIL]
-
-**To lodge a complaint with the supervisory authority:**
-CNIL — Commission Nationale de l'Informatique et des Libertés
-Website: https://www.cnil.fr
-Online complaint form: https://www.cnil.fr/fr/plaintes`,
-      },
-    ],
+**Données de navigation (analytics) :**
+- PostHog collecte des données anonymisées sur l'utilisation du site (pages visitées, clics) afin d'améliorer l'expérience utilisateur. Ces données ne permettent pas de vous identifier personnellement.`,
   },
-};
+  {
+    id: "ia",
+    title: "3. L'IA et vos données — ce que vous devez savoir",
+    body: `**Comment l'IA utilise vos données :**
 
-function renderBody(text: string) {
-  const lines = text.split("\n");
-  return lines.map((line, i) => {
-    const bold = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-    if (line.startsWith("- ")) {
-      return (
-        <li key={i} className="ml-4 list-disc" dangerouslySetInnerHTML={{ __html: bold.slice(2) }} />
-      );
-    }
-    if (/^\d+\. /.test(line)) {
-      return (
-        <li key={i} className="ml-4 list-decimal" dangerouslySetInnerHTML={{ __html: bold.replace(/^\d+\. /, "") }} />
-      );
-    }
-    if (line.trim() === "") return <br key={i} />;
-    return (
-      <p key={i} className="mb-1" dangerouslySetInnerHTML={{ __html: bold }} />
-    );
-  });
-}
+Vos réponses au questionnaire (destination, préférences, dates) sont envoyées à Claude AI (Anthropic) pour générer votre guide de voyage. C'est la raison d'être du service.
+
+**Ce que l'IA ne reçoit PAS :**
+- Votre nom complet
+- Votre adresse e-mail
+- Votre numéro de téléphone
+- Vos coordonnées bancaires
+
+**Important :** N'incluez dans vos réponses et vos notes libres **aucune information personnelle sensible** (numéro de sécurité sociale, données médicales précises, coordonnées bancaires, mots de passe, etc.). Ces informations n'ont aucune utilité pour générer votre guide et leur traitement par une IA tiers n'est pas couvert par cette politique.
+
+Anthropic (l'entreprise derrière Claude AI) dispose de sa propre politique de confidentialité disponible sur anthropic.com. Dans le cadre des API commerciales, Anthropic s'engage à ne pas utiliser les données soumises via l'API pour entraîner ses modèles.`,
+  },
+  {
+    id: "utilisation",
+    title: "4. Comment utilisons-nous vos données ?",
+    body: `| Donnée | Utilisation | Base légale |
+|--------|-------------|-------------|
+| E-mail | Livraison du guide, confirmation d'achat, support client | Exécution du contrat |
+| E-mail (newsletter) | Envoi d'actualités TravelGuide AI | Consentement explicite |
+| Téléphone | Vérification OTP, déblocage code promo WELCOME | Intérêt légitime / consentement |
+| Questionnaire | Génération de votre guide par IA | Exécution du contrat |
+| Paiement | Traitement de la transaction | Exécution du contrat |
+| Analytics | Amélioration du service | Intérêt légitime |
+
+**Ce que nous ne faisons JAMAIS :**
+- ❌ Revendre vos données à des tiers
+- ❌ Utiliser votre e-mail à des fins publicitaires sans votre consentement
+- ❌ Partager vos informations avec des annonceurs
+- ❌ Créer des profils publicitaires`,
+  },
+  {
+    id: "newsletter",
+    title: "5. Newsletter et communications",
+    body: `**Inscription à la newsletter :**
+- Uniquement sur inscription volontaire (pop-up ou formulaire dédié).
+- Vous pouvez vous désinscrire à tout moment via le lien présent dans chaque e-mail.
+
+**E-mails liés à votre achat :**
+- Confirmation de commande
+- Livraison de votre guide PDF
+- Réponses à vos demandes de support
+
+Nous ne vous enverrons **jamais** d'e-mails commerciaux non sollicités.`,
+  },
+  {
+    id: "soustraitants",
+    title: "6. Sous-traitants et transferts de données",
+    body: `Nous faisons appel aux prestataires suivants. Chacun est soumis à des contrats de traitement conformes au RGPD :
+
+| Prestataire | Rôle | Localisation |
+|-------------|------|--------------|
+| **Supabase** | Base de données, authentification | UE (hébergement AWS eu-central) |
+| **Vercel** | Hébergement du site web | UE / USA (Standard Contractual Clauses) |
+| **Stripe** | Paiement en ligne | USA (SCC + Privacy Shield) |
+| **Twilio** | Vérification SMS (OTP) | USA (SCC) |
+| **Anthropic / Claude AI** | Génération du guide par IA | USA (SCC — données questionnaire uniquement, non personnelles) |
+| **PostHog** | Analytics anonymisés | EU Cloud |
+
+Aucun autre tiers n'a accès à vos données personnelles.`,
+  },
+  {
+    id: "conservation",
+    title: "7. Durée de conservation",
+    body: `- **Compte et e-mail :** conservés tant que votre compte est actif, puis supprimés sous 30 jours après demande de clôture.
+- **Numéro de téléphone :** conservé jusqu'à suppression du compte.
+- **Données du questionnaire :** conservées dans votre historique de commande pour vous permettre de les consulter. Supprimées à la clôture du compte.
+- **Données de paiement :** gérées par Stripe selon ses propres règles de conservation (obligations légales comptables — 10 ans).
+- **Logs de navigation (PostHog) :** 12 mois, données anonymisées.`,
+  },
+  {
+    id: "droits",
+    title: "8. Vos droits RGPD",
+    body: `Conformément au Règlement Général sur la Protection des Données (RGPD — UE 2016/679), vous disposez des droits suivants :
+
+- **Droit d'accès** : obtenir une copie de vos données personnelles
+- **Droit de rectification** : corriger des données inexactes
+- **Droit à l'effacement** ("droit à l'oubli") : demander la suppression de vos données
+- **Droit à la portabilité** : recevoir vos données dans un format lisible
+- **Droit d'opposition** : vous opposer à certains traitements (ex. newsletter)
+- **Droit à la limitation** : restreindre le traitement dans certains cas
+
+**Pour exercer vos droits :** Contactez-nous à privacy@travelguide-ai.com avec une preuve d'identité. Nous répondons sous 30 jours.
+
+En cas de litige, vous pouvez également saisir la **CNIL** : [cnil.fr](https://www.cnil.fr)`,
+  },
+  {
+    id: "cookies",
+    title: "9. Cookies et traceurs",
+    body: `**Cookies strictement nécessaires :** Session utilisateur (JWT chiffré). Indispensable au fonctionnement du service. Durée : 7 jours.
+
+**Cookies analytics (PostHog) :** Analyse anonymisée de l'utilisation. Vous pouvez les refuser sans impact sur le service.
+
+Aucun cookie publicitaire ou de tracking tiers n'est déposé sur votre navigateur.`,
+  },
+  {
+    id: "contact",
+    title: "10. Contact & mise à jour",
+    body: `**Contact DPO / Privacy :** privacy@travelguide-ai.com
+
+Cette politique peut être mise à jour. La date de dernière modification est indiquée en haut de page. En cas de modification substantielle, vous serez informé par e-mail.
+
+**Version actuelle :** Juin 2026`,
+  },
+];
+
+const FAQ_DATA = [
+  {
+    q: "Mes données sont-elles en sécurité ?",
+    a: "Oui. Vos données sont stockées sur Supabase (infrastructure AWS, datacenter européen), avec chiffrement en transit (HTTPS/TLS) et au repos. Vos mots de passe ne sont jamais stockés en clair — ils sont hachés avec bcrypt avant stockage. Nous ne pouvons pas accéder à votre mot de passe.",
+  },
+  {
+    q: "Qui a accès à mes données ?",
+    a: "Seuls nos prestataires techniques ont accès à certaines données dans le cadre strict de leur mission : Supabase (hébergement BDD), Stripe (paiement), Twilio (SMS OTP), Anthropic/Claude (génération du guide — données questionnaire uniquement), PostHog (analytics anonymisés), Vercel (hébergement web). Aucun annonceur, aucun revendeur de données n'y a accès.",
+  },
+  {
+    q: "L'IA garde-t-elle mes informations ?",
+    a: "Non. Dans le cadre des API commerciales d'Anthropic (Claude AI), les données soumises ne sont pas utilisées pour entraîner les modèles. Les données de votre questionnaire sont transmises ponctuellement pour générer votre guide, puis le traitement s'arrête. Aucune donnée sensible (email, téléphone, paiement) n'est transmise à l'IA.",
+  },
+  {
+    q: "Mon adresse e-mail sera-t-elle revendue ?",
+    a: "Jamais. Votre e-mail est utilisé uniquement pour vous livrer votre guide, confirmer votre commande et vous contacter en cas de problème. Si vous vous inscrivez à la newsletter, vous pouvez vous désinscrire à tout moment d'un simple clic.",
+  },
+  {
+    q: "À quoi sert mon numéro de téléphone ?",
+    a: "Uniquement pour la vérification de votre identité par SMS (code à 6 chiffres). Cette vérification vous permet de débloquer le code promo WELCOME (-40%). Votre numéro n'est pas utilisé à des fins commerciales, pas revendu et pas partagé avec des tiers non mentionnés.",
+  },
+  {
+    q: "Quelles données l'IA utilise-t-elle pour créer mon guide ?",
+    a: "Uniquement vos réponses au questionnaire de voyage : destination, dates, style de voyage, budget, intérêts, préférences alimentaires, etc. Ces données ne sont pas sensibles. Votre nom, email, téléphone et données bancaires ne sont jamais transmis à l'IA.",
+  },
+  {
+    q: "Puis-je supprimer mon compte et mes données ?",
+    a: "Oui. Envoyez une demande à privacy@travelguide-ai.com. Nous procédons à la suppression complète de vos données dans un délai de 30 jours. Seules certaines données comptables (liées aux paiements Stripe) sont conservées pour obligation légale.",
+  },
+  {
+    q: "Comment fonctionne le paiement ? Est-ce sécurisé ?",
+    a: "Les paiements sont traités exclusivement par Stripe, leader mondial du paiement en ligne (certifié PCI-DSS niveau 1). Nous ne voyons jamais votre numéro de carte bancaire — seul Stripe y a accès.",
+  },
+  {
+    q: "Mon guide PDF est-il stocké quelque part ?",
+    a: "Votre guide généré est stocké dans votre espace compte pour vous permettre de le retélécharger. Vous pouvez demander sa suppression à tout moment.",
+  },
+  {
+    q: "Comment me désinscrire de la newsletter ?",
+    a: "Chaque e-mail de newsletter contient un lien de désinscription en bas de message. Un clic suffit. Vous pouvez aussi nous écrire à privacy@travelguide-ai.com.",
+  },
+];
 
 export default function PrivacyPage() {
-  const [lang, setLang] = useState<"fr" | "en">("fr");
-  const t = content[lang];
+  const [lang, setLang] = useState<Lang>("fr");
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activeSection, setActiveSection] = useState<string>("qui");
 
   return (
-    <div className="min-h-screen bg-[#F8F4EF]" style={{ fontFamily: "var(--font-dm-sans, system-ui, sans-serif)" }}>
+    <div className="min-h-screen bg-white" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
+
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-[#F8F4EF]/95 backdrop-blur border-b border-[#425C47]/10 px-6 py-4">
-        <div className="max-w-3xl mx-auto flex items-center justify-between">
-          <Link href="/" className="text-sm text-[#425C47]/60 hover:text-[#425C47] transition-colors">
-            {t.back}
+      <header className="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-gray-100 shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 text-sm text-[#425C47]/70 hover:text-[#425C47] transition-colors font-medium">
+            ← Retour au site
           </Link>
+          <span className="font-bold text-[#425C47]" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
+            TravelGuide AI
+          </span>
           <button
-            onClick={() => setLang(lang === "fr" ? "en" : "fr")}
-            className="text-xs font-semibold px-3 py-1.5 rounded-full border border-[#425C47]/20 hover:bg-[#425C47] hover:text-white transition-colors"
+            onClick={() => setLang(l => l === "fr" ? "en" : "fr")}
+            className="text-lg border border-[#425C47]/20 rounded-md px-2 py-1 hover:bg-[#425C47]/5 transition-all"
           >
-            {t.other}
+            {lang === "fr" ? "🇬🇧" : "🇫🇷"}
           </button>
         </div>
       </header>
 
-      {/* Content */}
-      <main className="max-w-3xl mx-auto px-6 py-12">
-        {/* Title */}
-        <div className="mb-10">
-          <h1
-            className="text-3xl font-bold text-[#425C47] mb-2"
-            style={{ fontFamily: "var(--font-playfair, Georgia, serif)" }}
-          >
-            {t.title}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+
+        {/* Hero */}
+        <div className="mb-12 text-center">
+          <div className="inline-flex items-center gap-2 bg-[#425C47]/8 border border-[#425C47]/15 rounded-full px-4 py-1.5 mb-4">
+            <span>🛡️</span>
+            <span className="text-xs font-bold text-[#425C47] uppercase tracking-wide">RGPD conforme · Juin 2026</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#425C47] mb-3" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
+            Confidentialité & FAQ
           </h1>
-          <p className="text-sm text-[#425C47]/50">{t.subtitle}</p>
-          <p className="mt-3 text-xs text-[#425C47]/40 italic border-l-2 border-[#E8A87C] pl-3">{t.note}</p>
+          <p className="text-[#425C47]/60 max-w-xl mx-auto text-base">
+            Transparent sur ce que nous faisons de vos données. Aucune surprise, aucune revente.
+          </p>
         </div>
 
-        {/* Sections */}
-        <div className="space-y-8">
-          {t.sections.map((section) => (
-            <section key={section.id} id={section.id} className="scroll-mt-20">
-              <h2 className="text-lg font-semibold text-[#425C47] mb-3 pb-1 border-b border-[#425C47]/10">
-                {section.title}
-              </h2>
-              <div className="text-sm text-[#425C47]/75 leading-relaxed space-y-1">
-                {renderBody(section.body)}
-              </div>
-            </section>
+        {/* Résumé rapide */}
+        <div className="grid sm:grid-cols-3 gap-4 mb-14">
+          {[
+            { icon: "🚫", title: "Zéro revente", desc: "Vos données ne sont jamais vendues à des tiers ou annonceurs." },
+            { icon: "🤖", title: "IA sans données perso", desc: "Claude AI reçoit uniquement vos préférences de voyage, pas votre email ni téléphone." },
+            { icon: "📧", title: "Email = commande only", desc: "On vous écrit uniquement pour votre guide et votre commande. Newsletter = opt-in." },
+          ].map(card => (
+            <div key={card.title} className="rounded-2xl border border-gray-100 bg-[#F5F7F5] p-5 text-center shadow-sm">
+              <div className="text-3xl mb-2">{card.icon}</div>
+              <div className="font-bold text-[#425C47] text-sm mb-1">{card.title}</div>
+              <p className="text-xs text-[#425C47]/60 leading-relaxed">{card.desc}</p>
+            </div>
           ))}
         </div>
 
-        {/* Footer note */}
-        <div className="mt-16 pt-8 border-t border-[#425C47]/10 text-center text-xs text-[#425C47]/40">
-          <p>TravelGuide AI — Spire GG</p>
-          <p className="mt-1">
-            {lang === "fr"
-              ? "Pour toute question : [EMAIL DE CONTACT]"
-              : "For any question: [CONTACT EMAIL]"}
-          </p>
+        {/* FAQ */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-[#425C47] mb-2" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
+            Questions fréquentes
+          </h2>
+          <p className="text-sm text-[#425C47]/55 mb-6">Tout ce que vous voulez savoir sur la sécurité et l&apos;utilisation de vos données.</p>
+          <div className="space-y-2">
+            {FAQ_DATA.map((item, i) => (
+              <div key={i} className="rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[#F5F7F5] transition-colors"
+                >
+                  <span className="font-semibold text-[#425C47] text-sm pr-4">{item.q}</span>
+                  <span className={`text-[#C9A84C] text-lg font-bold flex-shrink-0 transition-transform duration-200 ${openFaq === i ? "rotate-45" : ""}`}>+</span>
+                </button>
+                {openFaq === i && (
+                  <div className="px-5 pb-5 text-sm text-[#425C47]/75 leading-relaxed border-t border-gray-100 pt-4 bg-white">
+                    {item.a}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Politique complète */}
+        <div className="grid lg:grid-cols-[220px_1fr] gap-8">
+
+          {/* Sommaire sticky */}
+          <nav className="hidden lg:block">
+            <div className="sticky top-24 rounded-2xl border border-gray-100 bg-[#F5F7F5] p-4">
+              <p className="text-xs font-bold uppercase tracking-widest text-[#425C47]/50 mb-3">Sommaire</p>
+              <ul className="space-y-1">
+                {SECTIONS_FR.map(s => (
+                  <li key={s.id}>
+                    <a
+                      href={`#${s.id}`}
+                      onClick={() => setActiveSection(s.id)}
+                      className={`block text-xs py-1.5 px-2 rounded-lg transition-colors ${
+                        activeSection === s.id
+                          ? "bg-[#425C47] text-white font-semibold"
+                          : "text-[#425C47]/65 hover:text-[#425C47] hover:bg-white"
+                      }`}
+                    >
+                      {s.title.replace(/^\d+\.\s/, "")}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </nav>
+
+          {/* Contenu */}
+          <div className="space-y-10">
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-900">
+              <span className="font-bold">⚠️ Information importante :</span> N&apos;incluez jamais d&apos;informations sensibles (données médicales précises, coordonnées bancaires, mots de passe) dans les notes libres du questionnaire. Ces données seraient traitées par l&apos;IA sans les garanties adaptées.
+            </div>
+
+            {SECTIONS_FR.map(section => (
+              <section key={section.id} id={section.id}>
+                <h2 className="text-lg font-bold text-[#425C47] mb-3 pb-2 border-b border-gray-100" style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}>
+                  {section.title}
+                </h2>
+                <div className="text-sm text-[#425C47]/75 leading-relaxed space-y-3">
+                  {section.body.split("\n\n").map((paragraph, j) => {
+                    if (paragraph.startsWith("|")) {
+                      const rows = paragraph.trim().split("\n").filter(r => !r.match(/^\|[-\s|]+$/));
+                      const headers = rows[0].split("|").filter(Boolean).map(h => h.trim());
+                      const dataRows = rows.slice(1);
+                      return (
+                        <div key={j} className="overflow-x-auto">
+                          <table className="w-full text-xs border-collapse">
+                            <thead>
+                              <tr className="bg-[#425C47] text-white">
+                                {headers.map((h, k) => <th key={k} className="px-3 py-2 text-left font-semibold">{h}</th>)}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {dataRows.map((row, k) => {
+                                const cells = row.split("|").filter(Boolean).map(c => c.trim());
+                                return (
+                                  <tr key={k} className={k % 2 === 0 ? "bg-white" : "bg-[#F5F7F5]"}>
+                                    {cells.map((cell, l) => (
+                                      <td key={l} className="px-3 py-2 border-b border-gray-100" dangerouslySetInnerHTML={{ __html: cell.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") }} />
+                                    ))}
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      );
+                    }
+                    return (
+                      <p key={j} dangerouslySetInnerHTML={{
+                        __html: paragraph
+                          .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                          .replace(/\n/g, "<br/>")
+                          .replace(/- (.*?)(<br\/>|$)/g, "• $1$2")
+                          .replace(/❌ /g, "<span class='text-red-500'>❌ </span>")
+                      }} />
+                    );
+                  })}
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-16 pt-8 border-t border-gray-100 text-center text-xs text-[#425C47]/40">
+          <p>© 2026 TravelGuide AI · <a href="mailto:privacy@travelguide-ai.com" className="underline hover:text-[#425C47]">privacy@travelguide-ai.com</a></p>
+          <p className="mt-1">Pour exercer vos droits RGPD, contactez-nous. Nous répondons sous 30 jours.</p>
         </div>
       </main>
     </div>

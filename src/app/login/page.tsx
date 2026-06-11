@@ -42,13 +42,13 @@ export default function LoginPage() {
     >
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-block text-2xl font-bold" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1B2A4A" }}>
+          <Link href="/" className="inline-block text-2xl font-bold" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}>
             ✈️ TravelGuide AI
           </Link>
         </div>
 
         <div className="rounded-2xl p-8 shadow-lg" style={{ background: "#fff", border: "1px solid #E8E0D0" }}>
-          <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#1B2A4A" }}>
+          <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-playfair), Georgia, serif", color: "#425C47" }}>
             Connexion
           </h1>
           <p className="text-sm mb-6" style={{ color: "#7a7060" }}>
@@ -57,7 +57,7 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1" style={{ color: "#1B2A4A" }}>Email</label>
+              <label className="block text-sm font-medium mb-1" style={{ color: "#425C47" }}>Email</label>
               <input
                 type="email"
                 value={email}
@@ -65,13 +65,13 @@ export default function LoginPage() {
                 required
                 placeholder="vous@exemple.com"
                 className="w-full rounded-xl px-4 py-3 text-sm outline-none transition-all"
-                style={{ background: "#F8F5EF", border: "1.5px solid #E8E0D0", color: "#1B2A4A" }}
+                style={{ background: "#F8F5EF", border: "1.5px solid #E8E0D0", color: "#425C47" }}
                 onFocus={(e) => (e.target.style.borderColor = "#C9A84C")}
                 onBlur={(e) => (e.target.style.borderColor = "#E8E0D0")}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1" style={{ color: "#1B2A4A" }}>Mot de passe</label>
+              <label className="block text-sm font-medium mb-1" style={{ color: "#425C47" }}>Mot de passe</label>
               <input
                 type="password"
                 value={password}
@@ -79,7 +79,7 @@ export default function LoginPage() {
                 required
                 placeholder="••••••••"
                 className="w-full rounded-xl px-4 py-3 text-sm outline-none transition-all"
-                style={{ background: "#F8F5EF", border: "1.5px solid #E8E0D0", color: "#1B2A4A" }}
+                style={{ background: "#F8F5EF", border: "1.5px solid #E8E0D0", color: "#425C47" }}
                 onFocus={(e) => (e.target.style.borderColor = "#C9A84C")}
                 onBlur={(e) => (e.target.style.borderColor = "#E8E0D0")}
               />
@@ -95,7 +95,7 @@ export default function LoginPage() {
               type="submit"
               disabled={loading}
               className="w-full rounded-xl py-3 font-semibold text-sm transition-all"
-              style={{ background: loading ? "#8899bb" : "#1B2A4A", color: "#fff" }}
+              style={{ background: loading ? "#8899bb" : "#425C47", color: "#fff" }}
             >
               {loading ? "Connexion…" : "Se connecter"}
             </button>
